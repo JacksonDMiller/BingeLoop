@@ -27,7 +27,6 @@ export default function EpisodeDetails({
       >
         ← Back to Episodes
       </button>
-
       {/* EPISODE IMAGE */}
       {episode.stillPath && (
         <img
@@ -36,7 +35,6 @@ export default function EpisodeDetails({
           className="w-full rounded-xl"
         />
       )}
-
       {/* EPISODE INFO */}
       <div>
         <h3 className="mb-1 text-2xl font-bold text-white">
@@ -49,7 +47,6 @@ export default function EpisodeDetails({
           <div className="text-sm text-gray-500">{episode.airDate}</div>
         )}
       </div>
-
       {/* SYNOPSIS */}
       {episode.overview && (
         <div>
@@ -58,7 +55,6 @@ export default function EpisodeDetails({
           <p className="leading-relaxed text-gray-300">{episode.overview}</p>
         </div>
       )}
-
       {/* ACTIONS */}
       <div className="flex flex-wrap gap-3">
         <button
@@ -84,7 +80,6 @@ export default function EpisodeDetails({
           Next Episode →
         </button>
       </div>
-
       {/* LESSON */}
       {lesson && (
         <div className="whitespace-pre-wrap rounded-xl border border-gray-800 bg-black/20 p-5">

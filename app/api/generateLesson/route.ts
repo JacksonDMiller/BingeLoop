@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import type { GenerateLessonRequest } from "@/types/media";
-
+import { generateLessonPrompt } from "@/lib/generateLessonPrompt";
 const MAX_SUBTITLE_LENGTH = 12000;
 
 const ai = new GoogleGenAI({
@@ -32,9 +32,13 @@ export async function POST(req: NextRequest) {
   try {
     const body: GenerateLessonRequest = await req.json();
 
-    const { showName, seasonNumber, episodeNumber, originalLanguage } = body;
-
-    console.log(originalLanguage, "bob");
+    const {
+      showName,
+      seasonNumber,
+      episodeNumber,
+      originalLanguage,
+      studyLanguage,
+    } = body;
 
     if (!showName || !seasonNumber || !episodeNumber) {
       return NextResponse.json(
@@ -144,101 +148,16 @@ export async function POST(req: NextRequest) {
 
     const shortenedSubtitles = parsedSubtitleText.slice(0, MAX_SUBTITLE_LENGTH);
 
-    console.log(shortenedSubtitles);
+    console.log(shortenedSubtitles, "subs");
 
-    return;
     // GENERATE LESSON
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
-      contents: `
-You are helping an English speaker prepare to watch anime in Japanese.
-
-The user's goals are:
-- improve Japanese listening comprehension
-- understand casual spoken Japanese
-- prepare BEFORE watching the episode
-- slowly build Kanji recognition
-
-The user does NOT comfortably read Kanji yet.
-
-Whenever Japanese is shown:
-- ALWAYS include furigana
-- Format ALL Japanese like:
-  日本語(にほんご)
-
-Never show Kanji without furigana.
-
-
-Focus heavily on:
-- practical listening comprehension
-- casual anime dialogue
-- contractions and slang
-- phrases that are hard to hear quickly
-- common spoken Japanese
-- useful recurring anime vocabulary
-
-Avoid:
-- overly academic explanations
-- excessive grammar terminology
-- giant walls of text
-- obscure vocabulary unless important
-
-Prefer:
-- natural English translations
-- concise explanations
-- practical understanding over literal translation
-
-# Episode Context
-
-Provide a short summary of what seems to be happening in the episode to help the student that will not be understanding all the dialogue.
-
-Generate EXACTLY:
-
-- 15 vocabulary words or phrases
-- 5 grammar or casual speech points
-
-Format the response EXACTLY like this:
-
-# Key Vocabulary
-
-For EACH item include:
-- Japanese with furigana
-- English meaning
-- Short nuance/explanation
-- Why it may be useful or hard to hear
-
-Example format:
-
-1.
-学校(がっこう)
-School
-
-Used constantly in slice-of-life anime.
-Can sound like "gakkou" very quickly in speech.
-
-# Grammar / Casual Speech Notes
-
-Provide EXACTLY 5 items.
-
-For EACH item include:
-- Original Japanese example with furigana
-- Natural English meaning
-- Short explanation of the grammar/casual speech
-- Why it may be difficult to catch while listening
-
-Focus especially on:
-- shortened speech
-- casual particles
-- dropped sounds
-- contractions
-- sentence endings
-- masculine/feminine casual speech
-- anime-style informal language
-
-
-Subtitles:
-${shortenedSubtitles}
-`,
+      contents: generateLessonPrompt({
+        subtitles: shortenedSubtitles,
+        nativeLanguage: "English",
+        studyLanguage,
+      }),
     });
 
     return NextResponse.json({
