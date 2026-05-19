@@ -38,6 +38,7 @@ export async function POST(req: NextRequest) {
       episodeNumber,
       originalLanguage,
       studyLanguage,
+      nativeLanguage,
     } = body;
 
     if (!showName || !seasonNumber || !episodeNumber) {
@@ -155,14 +156,37 @@ export async function POST(req: NextRequest) {
       model: "gemini-2.5-flash",
       contents: generateLessonPrompt({
         subtitles: shortenedSubtitles,
-        nativeLanguage: "English",
+        nativeLanguage: nativeLanguage,
         studyLanguage,
       }),
     });
+    if (!response.text || typeof response.text !== "string") {
+      throw new Error("AI response text was empty");
+    }
 
-    return NextResponse.json({
-      lesson: response.text,
-    });
+    const cleaned = response.text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    try {
+      const parsed = JSON.parse(cleaned);
+
+      return NextResponse.json({
+        lesson: parsed,
+      });
+    } catch (error) {
+      console.error("JSON PARSE FAILED");
+      console.error(error);
+      console.error(cleaned);
+
+      return NextResponse.json(
+        {
+          error: "AI returned invalid JSON",
+        },
+        { status: 500 },
+      );
+    }
   } catch (err) {
     console.error(err);
 

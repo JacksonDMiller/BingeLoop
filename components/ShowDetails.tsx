@@ -3,6 +3,7 @@ import EpisodesList from "@/components/EpisodesList";
 import SeasonsList from "@/components/SeasonsList";
 import ShowHeader from "@/components/ShowHeader";
 import type { Episode, Show, Season } from "@/types/media";
+import type { Lesson } from "@/types/lesson";
 
 type ShowDetailsProps = {
   selectedShow: Show;
@@ -13,7 +14,7 @@ type ShowDetailsProps = {
   episodes: Episode[];
   selectedEpisode: Episode | null;
 
-  lesson: string;
+  lesson: Lesson | null;
   loadingLesson: boolean;
 
   onSelectSeason: (seasonNumber: number) => void;

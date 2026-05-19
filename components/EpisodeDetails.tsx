@@ -1,9 +1,11 @@
 import { Episode } from "@/types/media";
+import LessonDisplay from "./LessonDisplay";
+import { Lesson } from "@/types/lesson";
 
 type EpisodeDetailsProps = {
   episode: Episode;
 
-  lesson: string;
+  lesson: Lesson | null;
   loadingLesson: boolean;
 
   onBack: () => void;
@@ -19,6 +21,7 @@ export default function EpisodeDetails({
   onGenerateLesson,
   onNextEpisode,
 }: EpisodeDetailsProps) {
+  console.log(lesson);
   return (
     <div className="space-y-5">
       <button
@@ -81,13 +84,7 @@ export default function EpisodeDetails({
         </button>
       </div>
       {/* LESSON */}
-      {lesson && (
-        <div className="whitespace-pre-wrap rounded-xl border border-gray-800 bg-black/20 p-5">
-          <h3 className="mb-3 text-xl font-bold text-white">Lesson</h3>
-
-          <div className="text-gray-200">{lesson}</div>
-        </div>
-      )}
+      {lesson && <LessonDisplay lesson={lesson}></LessonDisplay>}
     </div>
   );
 }

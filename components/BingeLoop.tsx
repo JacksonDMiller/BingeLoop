@@ -10,6 +10,7 @@ import type {
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
 import ShowDetails from "@/components/ShowDetails";
+import { Lesson } from "@/types/lesson";
 
 // TMDB API Response Types
 type TmdbShow = {
@@ -49,7 +50,7 @@ type SeasonDetailsResponse = {
 };
 
 type GenerateLessonResponse = {
-  lesson?: string;
+  lesson?: Lesson;
 };
 
 export default function SearchSubtitles() {
@@ -59,6 +60,9 @@ export default function SearchSubtitles() {
 
   // LEARNING LANGUAGE
   const [studyLanguage, setStudyLanguage] = useState("en");
+
+  // NATIVE LANGUAGE (user's current language)
+  const [nativeLanguage, setNativeLanguage] = useState("English");
 
   // SEARCH RESULTS
   const [results, setResults] = useState<Show[]>([]);
@@ -75,7 +79,7 @@ export default function SearchSubtitles() {
   const [selectedEpisode, setSelectedEpisode] = useState<Episode | null>(null);
 
   // LESSON
-  const [lesson, setLesson] = useState("");
+  const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loadingLesson, setLoadingLesson] = useState(false);
 
   // SEARCH SHOWS
@@ -134,7 +138,7 @@ export default function SearchSubtitles() {
     setSeasons([]);
     setEpisodes([]);
 
-    setLesson("");
+    setLesson(null);
 
     try {
       const response = await fetch(`/api/showDetails?id=${show.id}`);
@@ -166,7 +170,7 @@ export default function SearchSubtitles() {
     setSelectedSeason(seasonNumber);
     setSelectedEpisode(null);
 
-    setLesson("");
+    setLesson(null);
 
     try {
       const response = await fetch(
@@ -200,7 +204,7 @@ export default function SearchSubtitles() {
     if (!selectedShow || !selectedSeason) return;
 
     setLoadingLesson(true);
-    setLesson("");
+    setLesson(null);
 
     try {
       const requestBody: GenerateLessonRequest = {
@@ -209,7 +213,7 @@ export default function SearchSubtitles() {
         episodeNumber: episode.episodeNumber,
         originalLanguage: selectedShow.originalLanguage,
         studyLanguage,
-        // imdbID: selectedShow.imdbID
+        nativeLanguage,
       };
 
       const response = await fetch("/api/generateLesson", {
@@ -230,7 +234,7 @@ export default function SearchSubtitles() {
 
       const data: GenerateLessonResponse = await response.json();
 
-      setLesson(data.lesson || "No lesson returned.");
+      setLesson(data.lesson || null);
     } catch (err) {
       console.error(err);
     } finally {
@@ -251,7 +255,7 @@ export default function SearchSubtitles() {
     if (!nextEpisode) return;
 
     setSelectedEpisode(nextEpisode);
-    setLesson("");
+    setLesson(null);
   }
 
   return (
@@ -281,7 +285,7 @@ export default function SearchSubtitles() {
             setSeasons([]);
             setEpisodes([]);
 
-            setLesson("");
+            setLesson(null);
           }}
         />
 
@@ -307,6 +311,29 @@ export default function SearchSubtitles() {
             <option value="de">German</option>
           </select>
         </div>
+
+        <div className="w-full sm:w-52">
+          <label
+            htmlFor="native-language"
+            className="mb-2 block text-sm font-medium text-gray-400"
+          >
+            I speak
+          </label>
+
+          <select
+            id="native-language"
+            value={nativeLanguage}
+            onChange={(e) => setNativeLanguage(e.target.value)}
+            className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
+          >
+            <option value="English">English</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Korean">Korean</option>
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+          </select>
+        </div>
       </div>
       <SearchResults results={results} onSelectShow={selectShow} />
       {selectedShow && (
@@ -322,11 +349,11 @@ export default function SearchSubtitles() {
           onSelectEpisode={setSelectedEpisode}
           onBackToEpisodes={() => {
             setSelectedEpisode(null);
-            setLesson("");
+            setLesson(null);
           }}
           onGenerateLesson={generateLesson}
           onNextEpisode={goToNextEpisode}
-          clearLesson={() => setLesson("")}
+          clearLesson={() => setLesson(null)}
         />
       )}
     </div>

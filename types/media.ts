@@ -4,6 +4,7 @@ export type GenerateLessonRequest = {
   episodeNumber: number;
   originalLanguage: string | undefined;
   studyLanguage: string;
+  nativeLanguage: string;
 };
 
 export type GenerateLessonResponse = {
