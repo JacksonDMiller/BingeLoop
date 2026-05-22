@@ -116,7 +116,7 @@ export default function LessonDisplay({ lesson }: Props) {
             >
               <div className="flex flex-wrap items-center gap-3">
                 <h3 className="text-3xl font-bold text-orange-400">
-                  {item.word}
+                  {item.word.targetLanguage}
                 </h3>
 
                 <span className="rounded-full bg-zinc-800 px-3 py-1 text-xs uppercase tracking-wide text-zinc-300">
@@ -125,7 +125,15 @@ export default function LessonDisplay({ lesson }: Props) {
               </div>
 
               {showRomanized && (
-                <p className="mt-2 italic text-zinc-400">{item.romanized}</p>
+                <p className="mt-2 italic text-zinc-400">
+                  {item.word.romanized}
+                </p>
+              )}
+
+              {showNativeLanguage && (
+                <p className="mt-2 italic text-zinc-400">
+                  {item.word.nativeLanguage}
+                </p>
               )}
 
               <p className="mt-4 text-zinc-200">{item.shortExplanation}</p>

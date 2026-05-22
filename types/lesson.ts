@@ -4,8 +4,15 @@ export type ExampleSentence = {
   nativeLanguage: string;
 };
 
+export type Word = {
+  targetLanguage: string;
+  romanized: string;
+  nativeLanguage: string;
+};
+
 export type VocabularyItem = {
-  word: string;
+  word: Word;
+  nativeLanguageWord: string;
   romanized: string;
   partOfSpeech: string;
   shortExplanation: string;

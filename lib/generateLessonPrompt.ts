@@ -65,7 +65,11 @@ Return EXACTLY this structure:
   },
   "keyVocabulary": [
     {
-      "word": "",
+      "word": {
+        "targetLanguage": "",
+        "romanized": "",
+        "nativeLanguage": ""
+      },
       "romanized": "",
       "partOfSpeech": "",
       "shortExplanation": "",
