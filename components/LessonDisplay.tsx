@@ -118,6 +118,34 @@ export default function LessonDisplay({ lesson }: Props) {
                 <h3 className="text-3xl font-bold text-orange-400">
                   {item.word.targetLanguage}
                 </h3>
+                {/* // need to handle multiple languages here */}
+                <button
+                  onClick={async () => {
+                    const response = await fetch("/api/generateVoice", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        text: item.word,
+                      }),
+                    });
+
+                    if (!response.ok) {
+                      console.error("TTS request failed");
+                      return;
+                    }
+                    const blob = await response.blob();
+
+                    const audioUrl = URL.createObjectURL(blob);
+
+                    const audio = new Audio(audioUrl);
+
+                    audio.play();
+                  }}
+                >
+                  🔊
+                </button>
 
                 <span className="rounded-full bg-zinc-800 px-3 py-1 text-xs uppercase tracking-wide text-zinc-300">
                   {item.partOfSpeech}
