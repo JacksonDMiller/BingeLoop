@@ -2,7 +2,7 @@ export type GenerateLessonRequest = {
   showName: string;
   seasonNumber: number;
   episodeNumber: number;
-  originalLanguage: string | undefined;
+  originalLanguage: string;
   studyLanguage: string;
   nativeLanguage: string;
 };

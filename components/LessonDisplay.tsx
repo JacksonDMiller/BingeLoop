@@ -127,7 +127,7 @@ export default function LessonDisplay({ lesson }: Props) {
                         "Content-Type": "application/json",
                       },
                       body: JSON.stringify({
-                        text: item.word,
+                        text: item.word.targetLanguage,
                       }),
                     });
 

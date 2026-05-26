@@ -1,3 +1,6 @@
 1. Accounts
 2. Ending assessment
 3. Avoid spoiler toggles 
+4. Fix voice button {saying object object}
+5. Trying to figure out Jimaku subs (see scratch paper)
+6. 
