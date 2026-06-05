@@ -1,6 +1,7 @@
 import { Episode } from "@/types/media";
 import LessonDisplay from "./LessonDisplay";
 import { Lesson } from "@/types/lesson";
+import { LanguageId } from "@/languages";
 
 type EpisodeDetailsProps = {
   episode: Episode;
@@ -11,6 +12,7 @@ type EpisodeDetailsProps = {
   onBack: () => void;
   onGenerateLesson: () => void;
   onNextEpisode: () => void;
+  studyLanguage: LanguageId;
 };
 
 export default function EpisodeDetails({
@@ -20,6 +22,7 @@ export default function EpisodeDetails({
   onBack,
   onGenerateLesson,
   onNextEpisode,
+  studyLanguage,
 }: EpisodeDetailsProps) {
   console.log(lesson);
   return (
@@ -84,7 +87,12 @@ export default function EpisodeDetails({
         </button>
       </div>
       {/* LESSON */}
-      {lesson && <LessonDisplay lesson={lesson}></LessonDisplay>}
+      {lesson && (
+        <LessonDisplay
+          lesson={lesson}
+          studyLanguage={studyLanguage}
+        ></LessonDisplay>
+      )}
     </div>
   );
 }

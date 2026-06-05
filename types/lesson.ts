@@ -12,11 +12,9 @@ export type Word = {
 
 export type VocabularyItem = {
   word: Word;
-  nativeLanguageWord: string;
-  romanized: string;
-  partOfSpeech: string;
-  shortExplanation: string;
-  memoryHint: string;
+  NativeLanguagePartOfSpeech: string;
+  NativeLanguageShortExplanation: string;
+  NativeLanguageMemoryHint: string;
   exampleSentence: ExampleSentence;
 };
 

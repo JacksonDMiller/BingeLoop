@@ -11,8 +11,10 @@ import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
 import ShowDetails from "@/components/ShowDetails";
 import { Lesson } from "@/types/lesson";
+import { LANGUAGES, type LanguageId } from "@/languages";
 
 // TMDB API Response Types
+
 type TmdbShow = {
   id: number;
   name: string;
@@ -53,16 +55,26 @@ type GenerateLessonResponse = {
   lesson?: Lesson;
 };
 
+export function getLanguageIdFromTmdbCode(
+  code?: string,
+): LanguageId | undefined {
+  return Object.entries(LANGUAGES).find(
+    ([_, language]) => language.codes.iso639_1 === code,
+  )?.[0] as LanguageId | "english";
+}
+
+const LANGUAGE_OPTIONS = Object.entries(LANGUAGES);
+
 export default function SearchSubtitles() {
   // SEARCH STATE
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   // LEARNING LANGUAGE
-  const [studyLanguage, setStudyLanguage] = useState("en");
+  const [studyLanguage, setStudyLanguage] = useState<LanguageId>("japanese");
 
-  // NATIVE LANGUAGE (user's current language)
-  const [nativeLanguage, setNativeLanguage] = useState("English");
+  // NATIVE LANGUAGE
+  const [nativeLanguage, setNativeLanguage] = useState<LanguageId>("english");
 
   // SEARCH RESULTS
   const [results, setResults] = useState<Show[]>([]);
@@ -109,7 +121,7 @@ export default function SearchSubtitles() {
           backdropPath: show.backdrop_path,
           overview: show.overview,
           firstAirDate: show.first_air_date,
-          originalLanguage: show.original_language,
+          originalLanguage: getLanguageIdFromTmdbCode(show.original_language),
         }));
 
         setResults(normalizedResults);
@@ -270,6 +282,7 @@ export default function SearchSubtitles() {
           Keep Watching. Keep Learning.
         </p>
       </div>
+
       {/* TOP BAR */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end">
         <SearchBar
@@ -300,15 +313,14 @@ export default function SearchSubtitles() {
           <select
             id="study-language"
             value={studyLanguage}
-            onChange={(e) => setStudyLanguage(e.target.value)}
+            onChange={(e) => setStudyLanguage(e.target.value as LanguageId)}
             className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
           >
-            <option value="en">English</option>
-            <option value="ja">Japanese</option>
-            <option value="ko">Korean</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>
-            <option value="de">German</option>
+            {LANGUAGE_OPTIONS.map(([id, language]) => (
+              <option key={id} value={id}>
+                {language.name}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -323,19 +335,20 @@ export default function SearchSubtitles() {
           <select
             id="native-language"
             value={nativeLanguage}
-            onChange={(e) => setNativeLanguage(e.target.value)}
+            onChange={(e) => setNativeLanguage(e.target.value as LanguageId)}
             className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
           >
-            <option value="English">English</option>
-            <option value="Japanese">Japanese</option>
-            <option value="Korean">Korean</option>
-            <option value="Spanish">Spanish</option>
-            <option value="French">French</option>
-            <option value="German">German</option>
+            {LANGUAGE_OPTIONS.map(([id, language]) => (
+              <option key={id} value={id}>
+                {language.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>
+
       <SearchResults results={results} onSelectShow={selectShow} />
+
       {selectedShow && (
         <ShowDetails
           selectedShow={selectedShow}
@@ -345,6 +358,7 @@ export default function SearchSubtitles() {
           selectedEpisode={selectedEpisode}
           lesson={lesson}
           loadingLesson={loadingLesson}
+          studyLanguage={studyLanguage}
           onSelectSeason={selectSeason}
           onSelectEpisode={setSelectedEpisode}
           onBackToEpisodes={() => {

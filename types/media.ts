@@ -1,10 +1,12 @@
+import type { LanguageId } from "@/languages";
+
 export type GenerateLessonRequest = {
   showName: string;
   seasonNumber: number;
   episodeNumber: number;
-  originalLanguage: string;
-  studyLanguage: string;
-  nativeLanguage: string;
+  originalLanguage?: LanguageId;
+  studyLanguage: LanguageId;
+  nativeLanguage: LanguageId;
 };
 
 export type GenerateLessonResponse = {
@@ -27,11 +29,16 @@ export type Show = {
   backdropPath?: string | null;
   overview?: string;
   firstAirDate?: string;
-  originalLanguage?: string;
+  originalLanguage?: LanguageId;
   imdbID?: string;
 };
 
 export type Season = {
   seasonNumber: number;
   name: string;
+};
+
+export type GenerateVoiceRequest = {
+  text: string;
+  language: LanguageId;
 };

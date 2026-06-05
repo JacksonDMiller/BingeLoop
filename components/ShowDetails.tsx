@@ -4,6 +4,7 @@ import SeasonsList from "@/components/SeasonsList";
 import ShowHeader from "@/components/ShowHeader";
 import type { Episode, Show, Season } from "@/types/media";
 import type { Lesson } from "@/types/lesson";
+import { LanguageId } from "@/languages";
 
 type ShowDetailsProps = {
   selectedShow: Show;
@@ -28,6 +29,8 @@ type ShowDetailsProps = {
   onNextEpisode: () => void;
 
   clearLesson: () => void;
+
+  studyLanguage: LanguageId;
 };
 
 export default function ShowDetails({
@@ -41,6 +44,7 @@ export default function ShowDetails({
 
   lesson,
   loadingLesson,
+  studyLanguage,
 
   onSelectSeason,
   onSelectEpisode,
@@ -90,6 +94,7 @@ export default function ShowDetails({
               onBack={onBackToEpisodes}
               onGenerateLesson={() => onGenerateLesson(selectedEpisode)}
               onNextEpisode={onNextEpisode}
+              studyLanguage={studyLanguage}
             />
           )}
         </div>

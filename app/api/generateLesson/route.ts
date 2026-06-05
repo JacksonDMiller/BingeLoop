@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 
 import type { GenerateLessonRequest } from "@/types/media";
+
+import { LANGUAGES, type LanguageId } from "@/languages";
+
 import { generateLessonPrompt } from "@/lib/generateLessonPrompt";
 import { lookupAniListId } from "@/lib/lookUpAniListId";
 
@@ -12,6 +15,7 @@ const ai = new GoogleGenAI({
 });
 
 const OPENSUBTITLES_API_KEY = process.env.OPENSUBTITLES_API_KEY!;
+
 const JIMAKU_API_KEY = process.env.JIMAKU_API_KEY!;
 
 /**
@@ -48,7 +52,7 @@ async function getOpenSubtitles({
   showName: string;
   seasonNumber: number;
   episodeNumber: number;
-  originalLanguage?: string;
+  originalLanguage?: LanguageId;
 }) {
   try {
     const params = new URLSearchParams({
@@ -57,8 +61,12 @@ async function getOpenSubtitles({
       episode_number: String(episodeNumber),
     });
 
+    /**
+     * CONVERT INTERNAL LANGUAGE ID
+     * -> EXTERNAL OPEN SUBTITLE CODE
+     */
     if (originalLanguage) {
-      params.append("languages", originalLanguage);
+      params.append("languages", LANGUAGES[originalLanguage].codes.iso639_1);
     }
 
     const subtitleSearchResponse = await fetch(
@@ -354,15 +362,28 @@ export async function POST(req: NextRequest) {
     const shortenedSubtitles = parsedSubtitleText.slice(0, MAX_SUBTITLE_LENGTH);
 
     /**
+     * CONVERT INTERNAL IDS
+     * -> HUMAN READABLE PROMPT VALUES
+     */
+    const studyLanguageName = studyLanguage;
+
+    const nativeLanguageName = nativeLanguage;
+
+    /**
      * GENERATE LESSON
      */
     const response = await ai.models.generateContent({
       model: "gemini-2.5-flash",
+
       contents: generateLessonPrompt({
         subtitles: shortenedSubtitles,
-        nativeLanguage,
-        studyLanguage,
+        nativeLanguage: nativeLanguageName,
+        studyLanguage: studyLanguageName,
       }),
+
+      config: {
+        responseMimeType: "application/json",
+      },
     });
 
     if (!response.text || typeof response.text !== "string") {
@@ -385,7 +406,9 @@ export async function POST(req: NextRequest) {
       });
     } catch (error) {
       console.error("JSON PARSE FAILED");
+
       console.error(error);
+
       console.error(cleaned);
 
       return NextResponse.json(

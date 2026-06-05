@@ -2,9 +2,13 @@
 
 import { Lesson } from "@/types/lesson";
 import { useState } from "react";
+import type { GenerateVoiceRequest } from "@/types/media";
+import { LanguageId } from "@/languages";
+import { playVoice } from "@/lib/playVoice";
 
 type Props = {
   lesson: Lesson;
+  studyLanguage: LanguageId;
 };
 
 function Toggle({
@@ -28,6 +32,39 @@ function Toggle({
       {label}
     </button>
   );
+}
+
+async function generateVoice(body: GenerateVoiceRequest) {
+  const response = await fetch("/api/generateVoice", {
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to generate voice");
+  }
+
+  const blob = await response.blob();
+
+  const audioUrl = URL.createObjectURL(blob);
+
+  const audio = new Audio(audioUrl);
+
+  return new Promise<void>((resolve, reject) => {
+    audio.onended = () => {
+      URL.revokeObjectURL(audioUrl);
+      resolve();
+    };
+
+    audio.onerror = reject;
+
+    audio.play().catch(reject);
+  });
 }
 
 function LanguageLine({
@@ -58,7 +95,7 @@ function LanguageLine({
   );
 }
 
-export default function LessonDisplay({ lesson }: Props) {
+export default function LessonDisplay({ lesson, studyLanguage }: Props) {
   const [showRomanized, setShowRomanized] = useState(true);
   const [showNativeLanguage, setShowNativeLanguage] = useState(true);
 
@@ -120,31 +157,14 @@ export default function LessonDisplay({ lesson }: Props) {
                 </h3>
                 {/* // need to handle multiple languages here */}
                 <button
-                  onClick={async () => {
-                    const response = await fetch("/api/generateVoice", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        text: item.word.targetLanguage,
-                      }),
-                    });
-
-                    if (!response.ok) {
-                      console.error("TTS request failed");
-                      return;
-                    }
-                    const blob = await response.blob();
-
-                    const audioUrl = URL.createObjectURL(blob);
-
-                    const audio = new Audio(audioUrl);
-
-                    audio.play();
-                  }}
+                  onClick={async () =>
+                    await playVoice({
+                      text: item.word.targetLanguage,
+                      language: studyLanguage,
+                    })
+                  }
                 >
-                  🔊
+                  🔊{" "}
                 </button>
 
                 <span className="rounded-full bg-zinc-800 px-3 py-1 text-xs uppercase tracking-wide text-zinc-300">
