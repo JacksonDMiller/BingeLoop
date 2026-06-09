@@ -5,10 +5,12 @@ import { useState } from "react";
 import type { GenerateVoiceRequest } from "@/types/media";
 import { LanguageId } from "@/languages";
 import { PlayAudioButton } from "@/components/PlayAudioButton";
+import { translations } from "@/translations";
 
 type Props = {
   lesson: Lesson;
   studyLanguage: LanguageId;
+  nativeLanguage: LanguageId;
 };
 
 function Toggle({
@@ -95,22 +97,29 @@ function LanguageLine({
   );
 }
 
-export default function LessonDisplay({ lesson, studyLanguage }: Props) {
+export default function LessonDisplay({
+  lesson,
+  studyLanguage,
+  nativeLanguage,
+}: Props) {
   const [showRomanized, setShowRomanized] = useState(true);
   const [showNativeLanguage, setShowNativeLanguage] = useState(true);
+
+  const t = translations[nativeLanguage];
+  const lessonT = t.lesson;
 
   return (
     <div className="mx-auto max-w-5xl space-y-10 px-4 py-10 text-white">
       {/* Header */}
       <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 border-b border-zinc-800 bg-black/80 py-4 backdrop-blur">
         <Toggle
-          label="Romanized"
+          label={lessonT.romanized}
           checked={showRomanized}
           onChange={() => setShowRomanized((prev) => !prev)}
         />
 
         <Toggle
-          label="Native Language"
+          label={lessonT.nativeLanguage}
           checked={showNativeLanguage}
           onChange={() => setShowNativeLanguage((prev) => !prev)}
         />
@@ -119,9 +128,11 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
       {/* Summary */}
       <section className="space-y-4">
         <div>
-          <h2 className="text-3xl font-bold">Pre-Watch Summary</h2>
+          <h2 className="text-3xl font-bold">
+            {lessonT.preWatchSummary.title}
+          </h2>
           <p className="mt-1 text-zinc-400">
-            Understand the episode before you watch.
+            {lessonT.preWatchSummary.description}
           </p>
         </div>
 
@@ -139,9 +150,9 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
       {/* Vocabulary */}
       <section className="space-y-5">
         <div>
-          <h2 className="text-3xl font-bold">Key Vocabulary</h2>
+          <h2 className="text-3xl font-bold">{lessonT.keyVocabulary.title}</h2>
           <p className="mt-1 text-zinc-400">
-            Important words and phrases to listen for.
+            {lessonT.keyVocabulary.description}
           </p>
         </div>
 
@@ -181,7 +192,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
 
               <div className="mt-4 rounded-2xl bg-zinc-950/70 p-4">
                 <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                  Memory Hint
+                  {lessonT.keyVocabulary.memoryHint}
                 </p>
 
                 <p className="mt-2 text-zinc-300">{item.memoryHint}</p>
@@ -190,7 +201,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
               <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/40 p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                    Example Sentence
+                    {lessonT.keyVocabulary.exampleSentence}
                   </p>
 
                   <PlayAudioButton
@@ -215,9 +226,9 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
       {/* Grammar */}
       <section className="space-y-5">
         <div>
-          <h2 className="text-3xl font-bold">Grammar Focus</h2>
+          <h2 className="text-3xl font-bold">{lessonT.grammarFocus.title}</h2>
           <p className="mt-1 text-zinc-400">
-            Common sentence patterns from the episode.
+            {lessonT.grammarFocus.description}
           </p>
         </div>
 
@@ -231,7 +242,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
 
               <div className="mt-4 rounded-2xl bg-orange-500/10 p-4">
                 <p className="text-sm uppercase tracking-wide text-orange-300">
-                  Pattern
+                  {lessonT.grammarFocus.pattern}
                 </p>
 
                 <p className="mt-1 text-lg text-orange-200">{item.pattern}</p>
@@ -240,7 +251,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
               <div className="mt-5 space-y-4">
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                    Meaning
+                    {lessonT.grammarFocus.meaning}
                   </p>
 
                   <p className="mt-1 text-zinc-200">{item.meaning}</p>
@@ -248,7 +259,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
 
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                    Usage
+                    {lessonT.grammarFocus.usage}
                   </p>
 
                   <p className="mt-1 text-zinc-200">{item.usage}</p>
@@ -256,7 +267,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
 
                 <div>
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                    Nuance
+                    {lessonT.grammarFocus.nuance}
                   </p>
 
                   <p className="mt-1 text-zinc-200">{item.nuance}</p>
@@ -266,7 +277,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
               <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/40 p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                    Example
+                    {lessonT.grammarFocus.example}
                   </p>
 
                   <PlayAudioButton
@@ -291,9 +302,11 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
       {/* Shadowing */}
       <section className="space-y-5">
         <div>
-          <h2 className="text-3xl font-bold">Shadowing Practice</h2>
+          <h2 className="text-3xl font-bold">
+            {lessonT.shadowingPractice.title}
+          </h2>
           <p className="mt-1 text-zinc-400">
-            Repeat these lines aloud to practice rhythm and pronunciation.
+            {lessonT.shadowingPractice.description}
           </p>
         </div>
 
@@ -311,7 +324,7 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
 
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-                      Shadowing Line
+                      {lessonT.shadowingPractice.shadowingLine}
                     </p>
                   </div>
                 </div>

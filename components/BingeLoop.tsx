@@ -12,6 +12,7 @@ import SearchResults from "@/components/SearchResults";
 import ShowDetails from "@/components/ShowDetails";
 import { Lesson } from "@/types/lesson";
 import { LANGUAGES, type LanguageId } from "@/languages";
+import { translations } from "@/translations";
 
 // TMDB API Response Types
 
@@ -75,6 +76,9 @@ export default function SearchSubtitles() {
 
   // NATIVE LANGUAGE
   const [nativeLanguage, setNativeLanguage] = useState<LanguageId>("english");
+
+  // Get translations based on native language
+  const t = translations[nativeLanguage].searchPage;
 
   // SEARCH RESULTS
   const [results, setResults] = useState<Show[]>([]);
@@ -278,9 +282,7 @@ export default function SearchSubtitles() {
           BingeLoop
         </h1>
 
-        <p className="mt-2 text-lg text-gray-400 sm:text-xl">
-          Keep Watching. Keep Learning.
-        </p>
+        <p className="mt-2 text-lg text-gray-400 sm:text-xl">{t.tagline}</p>
       </div>
 
       {/* TOP BAR */}
@@ -300,6 +302,7 @@ export default function SearchSubtitles() {
 
             setLesson(null);
           }}
+          nativeLanguage={nativeLanguage}
         />
 
         <div className="w-full sm:w-52">
@@ -307,7 +310,7 @@ export default function SearchSubtitles() {
             htmlFor="study-language"
             className="mb-2 block text-sm font-medium text-gray-400"
           >
-            Learn
+            {t.studyLanguageLabel}
           </label>
 
           <select
@@ -329,7 +332,7 @@ export default function SearchSubtitles() {
             htmlFor="native-language"
             className="mb-2 block text-sm font-medium text-gray-400"
           >
-            I speak
+            {t.nativeLanguageLabel}
           </label>
 
           <select
@@ -359,6 +362,7 @@ export default function SearchSubtitles() {
           lesson={lesson}
           loadingLesson={loadingLesson}
           studyLanguage={studyLanguage}
+          nativeLanguage={nativeLanguage}
           onSelectSeason={selectSeason}
           onSelectEpisode={setSelectedEpisode}
           onBackToEpisodes={() => {

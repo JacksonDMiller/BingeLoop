@@ -2,6 +2,7 @@ import { Episode } from "@/types/media";
 import LessonDisplay from "./LessonDisplay";
 import { Lesson } from "@/types/lesson";
 import { LanguageId } from "@/languages";
+import { translations } from "@/translations";
 
 type EpisodeDetailsProps = {
   episode: Episode;
@@ -13,6 +14,7 @@ type EpisodeDetailsProps = {
   onGenerateLesson: () => void;
   onNextEpisode: () => void;
   studyLanguage: LanguageId;
+  nativeLanguage: LanguageId;
 };
 
 export default function EpisodeDetails({
@@ -23,15 +25,19 @@ export default function EpisodeDetails({
   onGenerateLesson,
   onNextEpisode,
   studyLanguage,
+  nativeLanguage,
 }: EpisodeDetailsProps) {
   console.log(lesson);
+  // Use nativeLanguage for UI translations (the language the user understands)
+  const t = translations[nativeLanguage].searchPage;
+
   return (
     <div className="space-y-5">
       <button
         onClick={onBack}
         className="rounded-lg border border-gray-700 px-4 py-2 text-white transition hover:border-gray-500 hover:bg-white/5"
       >
-        ← Back to Episodes
+        ← {t.backToEpisodes}
       </button>
       {/* EPISODE IMAGE */}
       {episode.stillPath && (
@@ -44,7 +50,7 @@ export default function EpisodeDetails({
       {/* EPISODE INFO */}
       <div>
         <h3 className="mb-1 text-2xl font-bold text-white">
-          Episode {episode.episodeNumber}
+          {t.episode} {episode.episodeNumber}
         </h3>
 
         <div className="mb-2 text-lg text-gray-200">{episode.name}</div>
@@ -56,7 +62,7 @@ export default function EpisodeDetails({
       {/* SYNOPSIS */}
       {episode.overview && (
         <div>
-          <h4 className="mb-2 font-bold text-white">Synopsis</h4>
+          <h4 className="mb-2 font-bold text-white">{t.synopsis}</h4>
 
           <p className="leading-relaxed text-gray-300">{episode.overview}</p>
         </div>
@@ -72,10 +78,10 @@ export default function EpisodeDetails({
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
 
-              <span>Generating...</span>
+              <span>{t.generating}</span>
             </div>
           ) : (
-            "Generate Lesson"
+            t.generateLesson
           )}
         </button>
 
@@ -83,7 +89,7 @@ export default function EpisodeDetails({
           onClick={onNextEpisode}
           className="rounded-xl border border-gray-700 px-4 py-3 text-white transition hover:border-gray-500 hover:bg-white/5"
         >
-          Next Episode →
+          {t.nextEpisode} →
         </button>
       </div>
       {/* LESSON */}
@@ -91,6 +97,7 @@ export default function EpisodeDetails({
         <LessonDisplay
           lesson={lesson}
           studyLanguage={studyLanguage}
+          nativeLanguage={nativeLanguage}
         ></LessonDisplay>
       )}
     </div>

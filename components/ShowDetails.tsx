@@ -31,6 +31,7 @@ type ShowDetailsProps = {
   clearLesson: () => void;
 
   studyLanguage: LanguageId;
+  nativeLanguage: LanguageId;
 };
 
 export default function ShowDetails({
@@ -45,6 +46,7 @@ export default function ShowDetails({
   lesson,
   loadingLesson,
   studyLanguage,
+  nativeLanguage,
 
   onSelectSeason,
   onSelectEpisode,
@@ -73,6 +75,7 @@ export default function ShowDetails({
             seasons={seasons}
             selectedSeason={selectedSeason}
             onSelectSeason={onSelectSeason}
+            nativeLanguage={nativeLanguage}
           />
 
           {/* EPISODES */}
@@ -82,6 +85,7 @@ export default function ShowDetails({
               <EpisodesList
                 episodes={episodes}
                 onSelectEpisode={onSelectEpisode}
+                nativeLanguage={nativeLanguage}
               />
             )}
 
@@ -95,6 +99,7 @@ export default function ShowDetails({
               onGenerateLesson={() => onGenerateLesson(selectedEpisode)}
               onNextEpisode={onNextEpisode}
               studyLanguage={studyLanguage}
+              nativeLanguage={nativeLanguage}
             />
           )}
         </div>

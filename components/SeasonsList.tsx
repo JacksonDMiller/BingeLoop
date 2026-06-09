@@ -1,19 +1,25 @@
 import type { Season } from "@/types/media";
+import { LanguageId } from "@/languages";
+import { translations } from "@/translations";
 
 type SeasonsListProps = {
   seasons: Season[];
   selectedSeason: number | null;
   onSelectSeason: (seasonNumber: number) => void;
+  nativeLanguage: LanguageId;
 };
 
 export default function SeasonsList({
   seasons,
   selectedSeason,
   onSelectSeason,
+  nativeLanguage,
 }: SeasonsListProps) {
+  const t = translations[nativeLanguage].searchPage;
+
   return (
     <div className="space-y-3">
-      <h3 className="text-lg font-bold text-white">Seasons</h3>
+      <h3 className="text-lg font-bold text-white">{t.seasons}</h3>
 
       <div className="flex flex-wrap gap-2">
         {seasons.map((season) => (
@@ -26,7 +32,7 @@ export default function SeasonsList({
                 : "border-gray-700 text-white hover:border-gray-500 hover:bg-white/5"
             }`}
           >
-            Season {season.seasonNumber}
+            {t.season} {season.seasonNumber}
           </button>
         ))}
       </div>

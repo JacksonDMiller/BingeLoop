@@ -1,17 +1,23 @@
 import type { Episode } from "@/types/media";
+import { LanguageId } from "@/languages";
+import { translations } from "@/translations";
 
 type EpisodesListProps = {
   episodes: Episode[];
   onSelectEpisode: (episode: Episode) => void;
+  nativeLanguage: LanguageId;
 };
 
 export default function EpisodesList({
   episodes,
   onSelectEpisode,
+  nativeLanguage,
 }: EpisodesListProps) {
+  const t = translations[nativeLanguage].searchPage;
+
   return (
     <div className="space-y-3">
-      <h3 className="text-lg font-bold text-white">Episodes</h3>
+      <h3 className="text-lg font-bold text-white">{t.episodes}</h3>
 
       <div className="space-y-2">
         {episodes.map((episode) => (
