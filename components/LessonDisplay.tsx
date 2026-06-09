@@ -4,7 +4,7 @@ import { Lesson } from "@/types/lesson";
 import { useState } from "react";
 import type { GenerateVoiceRequest } from "@/types/media";
 import { LanguageId } from "@/languages";
-import { playVoice } from "@/lib/playVoice";
+import { PlayAudioButton } from "@/components/PlayAudioButton";
 
 type Props = {
   lesson: Lesson;
@@ -155,17 +155,10 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
                 <h3 className="text-3xl font-bold text-orange-400">
                   {item.word.targetLanguage}
                 </h3>
-                {/* // need to handle multiple languages here */}
-                <button
-                  onClick={async () =>
-                    await playVoice({
-                      text: item.word.targetLanguage,
-                      language: studyLanguage,
-                    })
-                  }
-                >
-                  🔊{" "}
-                </button>
+                <PlayAudioButton
+                  text={item.word.targetLanguage}
+                  language={studyLanguage}
+                />
 
                 <span className="rounded-full bg-zinc-800 px-3 py-1 text-xs uppercase tracking-wide text-zinc-300">
                   {item.partOfSpeech}
@@ -195,9 +188,16 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
               </div>
 
               <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/40 p-4">
-                <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                  Example Sentence
-                </p>
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+                    Example Sentence
+                  </p>
+
+                  <PlayAudioButton
+                    text={item.exampleSentence.targetLanguage}
+                    language={studyLanguage}
+                  />
+                </div>
 
                 <LanguageLine
                   target={item.exampleSentence.targetLanguage}
@@ -264,9 +264,16 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
               </div>
 
               <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/40 p-4">
-                <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-                  Example
-                </p>
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
+                    Example
+                  </p>
+
+                  <PlayAudioButton
+                    text={item.example.targetLanguage}
+                    language={studyLanguage}
+                  />
+                </div>
 
                 <LanguageLine
                   target={item.example.targetLanguage}
@@ -296,23 +303,34 @@ export default function LessonDisplay({ lesson, studyLanguage }: Props) {
               key={index}
               className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-5 shadow-xl"
             >
-              <div className="mb-4 flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 font-bold text-white">
-                  {index + 1}
+              <div className="mb-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 font-bold text-white">
+                    {index + 1}
+                  </div>
+
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                      Shadowing Line
+                    </p>
+                  </div>
                 </div>
 
-                <p className="text-sm uppercase tracking-wide text-zinc-500">
-                  Shadowing Line
-                </p>
+                <PlayAudioButton
+                  text={line.targetLanguage}
+                  language={studyLanguage}
+                ></PlayAudioButton>
               </div>
 
-              <LanguageLine
-                target={line.targetLanguage}
-                romanized={line.romanized}
-                nativeLanguage={line.nativeLanguage}
-                showRomanized={showRomanized}
-                showNativeLanguage={showNativeLanguage}
-              />
+              <div className="space-y-3">
+                <LanguageLine
+                  target={line.targetLanguage}
+                  romanized={line.romanized}
+                  nativeLanguage={line.nativeLanguage}
+                  showRomanized={showRomanized}
+                  showNativeLanguage={showNativeLanguage}
+                />
+              </div>
             </div>
           ))}
         </div>
