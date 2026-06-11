@@ -89,9 +89,7 @@ async function fetchTmdbShowInfo(showId: number) {
   }
 }
 
-async function getOpenSubtitlesFromSearch(
-  params: OpenSubtitlesSearchParams,
-) {
+async function getOpenSubtitlesFromSearch(params: OpenSubtitlesSearchParams) {
   const searchParams = new URLSearchParams({
     season_number: String(params.seasonNumber),
     episode_number: String(params.episodeNumber),
@@ -216,7 +214,11 @@ async function getOpenSubtitles({
       if (result) {
         console.log(
           "Found OpenSubtitles via",
-          params.tmdbId ? `tmdb_id=${params.tmdbId}` : params.imdbId ? `imdb_id=${params.imdbId}` : `query=${params.query}`,
+          params.tmdbId
+            ? `tmdb_id=${params.tmdbId}`
+            : params.imdbId
+              ? `imdb_id=${params.imdbId}`
+              : `query=${params.query}`,
         );
       }
       return result;

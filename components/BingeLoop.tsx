@@ -13,6 +13,7 @@ import ShowDetails from "@/components/ShowDetails";
 import { Lesson } from "@/types/lesson";
 import { LANGUAGES, type LanguageId } from "@/languages";
 import { translations } from "@/translations";
+import { useLocalStorageState } from "@/app/hooks/useLocalStorageState";
 
 // TMDB API Response Types
 
@@ -71,11 +72,15 @@ export default function SearchSubtitles() {
   const [inputValue, setInputValue] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // LEARNING LANGUAGE
-  const [studyLanguage, setStudyLanguage] = useState<LanguageId>("japanese");
+  const [studyLanguage, setStudyLanguage] = useLocalStorageState<LanguageId>(
+    "studyLanguage",
+    "japanese",
+  );
 
-  // NATIVE LANGUAGE
-  const [nativeLanguage, setNativeLanguage] = useState<LanguageId>("english");
+  const [nativeLanguage, setNativeLanguage] = useLocalStorageState<LanguageId>(
+    "nativeLanguage",
+    "english",
+  );
 
   // Get translations based on native language
   const t = translations[nativeLanguage].searchPage;
@@ -97,6 +102,12 @@ export default function SearchSubtitles() {
   // LESSON
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loadingLesson, setLoadingLesson] = useState(false);
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // SEARCH SHOWS
   useEffect(() => {
@@ -286,6 +297,10 @@ export default function SearchSubtitles() {
 
     setSelectedEpisode(nextEpisode);
     setLesson(null);
+  }
+
+  if (!mounted) {
+    return null;
   }
 
   return (
