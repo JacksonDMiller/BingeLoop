@@ -107,8 +107,13 @@ export default function SearchSubtitles() {
 
     const timeout = setTimeout(async () => {
       try {
+        // this is repeated a bunch
+        const languageCode = LANGUAGES[nativeLanguage].codes.tmdb;
+
         const response = await fetch(
-          `/api/searchShows?query=${encodeURIComponent(searchQuery)}`,
+          `/api/searchShows?query=${encodeURIComponent(
+            searchQuery,
+          )}&language=${encodeURIComponent(languageCode)}`,
         );
 
         if (!response.ok) {
@@ -157,7 +162,11 @@ export default function SearchSubtitles() {
     setLesson(null);
 
     try {
-      const response = await fetch(`/api/showDetails?id=${show.id}`);
+      const languageCode = LANGUAGES[nativeLanguage].codes.tmdb;
+
+      const response = await fetch(
+        `/api/showDetails?id=${show.id}&language=${encodeURIComponent(languageCode)}`,
+      );
 
       if (!response.ok) {
         console.error("Failed to load show details");
@@ -189,8 +198,12 @@ export default function SearchSubtitles() {
     setLesson(null);
 
     try {
+      const languageCode = LANGUAGES[nativeLanguage].codes.tmdb;
+
       const response = await fetch(
-        `/api/seasonDetails?showId=${selectedShow.id}&season=${seasonNumber}`,
+        `/api/seasonDetails?showId=${selectedShow.id}&season=${seasonNumber}&language=${encodeURIComponent(
+          languageCode,
+        )}`,
       );
 
       if (!response.ok) {

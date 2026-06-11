@@ -175,7 +175,6 @@ async function getOpenSubtitles({
  */
 async function getJimakuSubtitles({
   showName,
-  seasonNumber,
   episodeNumber,
 }: {
   showName: string;
@@ -287,9 +286,11 @@ async function getJimakuSubtitles({
 }
 
 export async function POST(req: NextRequest) {
-  return NextResponse.json({
-    lesson: JSON.parse(ExampleLesson),
-  });
+  // For Testing
+  // return NextResponse.json({
+  //   lesson: JSON.parse(ExampleLesson),
+  // });
+
   try {
     const body: GenerateLessonRequest = await req.json();
 
