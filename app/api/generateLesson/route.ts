@@ -18,6 +18,8 @@ const OPENSUBTITLES_API_KEY = process.env.OPENSUBTITLES_API_KEY!;
 
 const JIMAKU_API_KEY = process.env.JIMAKU_API_KEY!;
 
+const TMDB_BEARER_TOKEN = process.env.TMDB_BEARER_TOKEN;
+
 /**
  * CLEAN SRT/VTT SUBTITLES
  */
@@ -43,127 +45,219 @@ export function parseSubtitles(srt: string) {
 /**
  * OPEN SUBTITLES
  */
+type OpenSubtitlesSearchParams = {
+  query?: string;
+  tmdbId?: number;
+  imdbId?: string;
+  seasonNumber: number;
+  episodeNumber: number;
+  originalLanguage?: LanguageId;
+};
+
+async function fetchTmdbShowInfo(showId: number) {
+  if (!TMDB_BEARER_TOKEN) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.themoviedb.org/3/tv/${showId}?append_to_response=external_ids`,
+      {
+        headers: {
+          Authorization: `Bearer ${TMDB_BEARER_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      console.error("TMDB show lookup failed:", await response.text());
+      return null;
+    }
+
+    const data = await response.json();
+
+    return {
+      tmdbId: showId,
+      name: data.name as string | undefined,
+      originalName: data.original_name as string | undefined,
+      imdbId: data.external_ids?.imdb_id as string | undefined,
+    };
+  } catch (error) {
+    console.error("TMDB show lookup failed:", error);
+    return null;
+  }
+}
+
+async function getOpenSubtitlesFromSearch(
+  params: OpenSubtitlesSearchParams,
+) {
+  const searchParams = new URLSearchParams({
+    season_number: String(params.seasonNumber),
+    episode_number: String(params.episodeNumber),
+  });
+
+  if (params.query) {
+    searchParams.append("query", params.query);
+  }
+
+  if (params.tmdbId) {
+    searchParams.append("tmdb_id", String(params.tmdbId));
+  }
+
+  if (params.imdbId) {
+    searchParams.append("imdb_id", params.imdbId);
+  }
+
+  if (params.originalLanguage) {
+    searchParams.append(
+      "languages",
+      LANGUAGES[params.originalLanguage].codes.iso639_1,
+    );
+  }
+
+  const subtitleSearchResponse = await fetch(
+    `https://api.opensubtitles.com/api/v1/subtitles?${searchParams.toString()}`,
+    {
+      headers: {
+        "Api-Key": OPENSUBTITLES_API_KEY,
+      },
+    },
+  );
+
+  if (!subtitleSearchResponse.ok) {
+    console.error(
+      "OpenSubtitles search failed:",
+      await subtitleSearchResponse.text(),
+    );
+    return null;
+  }
+
+  const subtitleSearchData = await subtitleSearchResponse.json();
+  const subtitles = subtitleSearchData.data || [];
+
+  const subtitle = subtitles
+    .filter((subtitle: any) => subtitle.attributes?.files?.length > 0)
+    .sort(
+      (a: any, b: any) =>
+        (b.attributes?.download_count || 0) -
+        (a.attributes?.download_count || 0),
+    )[0];
+
+  if (!subtitle) {
+    return null;
+  }
+
+  const fileId = subtitle.attributes?.files?.[0]?.file_id;
+
+  if (!fileId) {
+    return null;
+  }
+
+  const downloadResponse = await fetch(
+    "https://api.opensubtitles.com/api/v1/download",
+    {
+      method: "POST",
+      headers: {
+        "Api-Key": OPENSUBTITLES_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        file_id: fileId,
+      }),
+    },
+  );
+
+  if (!downloadResponse.ok) {
+    console.error(
+      "OpenSubtitles download failed:",
+      await downloadResponse.text(),
+    );
+    return null;
+  }
+
+  const downloadData = await downloadResponse.json();
+  const subtitleFileUrl = downloadData.link;
+
+  if (!subtitleFileUrl) {
+    return null;
+  }
+
+  const subtitleFileResponse = await fetch(subtitleFileUrl);
+
+  if (!subtitleFileResponse.ok) {
+    console.error("Failed downloading subtitle file");
+    return null;
+  }
+
+  return await subtitleFileResponse.text();
+}
+
 async function getOpenSubtitles({
   showName,
   seasonNumber,
   episodeNumber,
   originalLanguage,
+  tmdbId,
+  imdbId,
+  alternativeNames = [],
 }: {
   showName: string;
   seasonNumber: number;
   episodeNumber: number;
   originalLanguage?: LanguageId;
+  tmdbId?: number;
+  imdbId?: string;
+  alternativeNames?: string[];
 }) {
   try {
-    const params = new URLSearchParams({
-      query: showName,
-      season_number: String(seasonNumber),
-      episode_number: String(episodeNumber),
-    });
+    const trySearch = async (params: OpenSubtitlesSearchParams) => {
+      const result = await getOpenSubtitlesFromSearch(params);
+      if (result) {
+        console.log(
+          "Found OpenSubtitles via",
+          params.tmdbId ? `tmdb_id=${params.tmdbId}` : params.imdbId ? `imdb_id=${params.imdbId}` : `query=${params.query}`,
+        );
+      }
+      return result;
+    };
 
-    /**
-     * CONVERT INTERNAL LANGUAGE ID
-     * -> EXTERNAL OPEN SUBTITLE CODE
-     */
-    if (originalLanguage) {
-      params.append("languages", LANGUAGES[originalLanguage].codes.iso639_1);
+    if (tmdbId || imdbId) {
+      const result = await trySearch({
+        tmdbId,
+        imdbId,
+        seasonNumber,
+        episodeNumber,
+        originalLanguage,
+      });
+      if (result) {
+        return result;
+      }
     }
 
-    const subtitleSearchResponse = await fetch(
-      `https://api.opensubtitles.com/api/v1/subtitles?${params.toString()}`,
-      {
-        headers: {
-          "Api-Key": OPENSUBTITLES_API_KEY,
-        },
-      },
+    const titleCandidates = Array.from(
+      new Set([showName, ...alternativeNames].filter(Boolean)),
     );
 
-    if (!subtitleSearchResponse.ok) {
-      console.error(
-        "OpenSubtitles search failed:",
-        await subtitleSearchResponse.text(),
-      );
+    for (const query of titleCandidates) {
+      const normalizedQuery = query.trim();
+      if (!normalizedQuery) continue;
 
-      return null;
+      const result = await trySearch({
+        query: normalizedQuery,
+        seasonNumber,
+        episodeNumber,
+        originalLanguage,
+      });
+
+      if (result) {
+        return result;
+      }
     }
 
-    const subtitleSearchData = await subtitleSearchResponse.json();
-
-    const subtitles = subtitleSearchData.data || [];
-
-    const subtitle = subtitles
-      .filter((subtitle: any) => subtitle.attributes?.files?.length > 0)
-      .sort(
-        (a: any, b: any) =>
-          (b.attributes?.download_count || 0) -
-          (a.attributes?.download_count || 0),
-      )[0];
-
-    if (!subtitle) {
-      console.log("No OpenSubtitles subtitle found");
-
-      return null;
-    }
-
-    const fileId = subtitle.attributes?.files?.[0]?.file_id;
-
-    if (!fileId) {
-      console.log("No OpenSubtitles file ID found");
-
-      return null;
-    }
-
-    /**
-     * REQUEST DOWNLOAD LINK
-     */
-    const downloadResponse = await fetch(
-      "https://api.opensubtitles.com/api/v1/download",
-      {
-        method: "POST",
-        headers: {
-          "Api-Key": OPENSUBTITLES_API_KEY,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          file_id: fileId,
-        }),
-      },
-    );
-
-    if (!downloadResponse.ok) {
-      console.error(
-        "OpenSubtitles download failed:",
-        await downloadResponse.text(),
-      );
-
-      return null;
-    }
-
-    const downloadData = await downloadResponse.json();
-
-    const subtitleFileUrl = downloadData.link;
-
-    if (!subtitleFileUrl) {
-      console.log("No subtitle download URL found");
-
-      return null;
-    }
-
-    /**
-     * DOWNLOAD SUBTITLE FILE
-     */
-    const subtitleFileResponse = await fetch(subtitleFileUrl);
-
-    if (!subtitleFileResponse.ok) {
-      console.error("Failed downloading subtitle file");
-
-      return null;
-    }
-
-    return await subtitleFileResponse.text();
+    return null;
   } catch (error) {
     console.error("OpenSubtitles failed:", error);
-
     return null;
   }
 }
@@ -296,6 +390,7 @@ export async function POST(req: NextRequest) {
 
     const {
       showName,
+      showId,
       seasonNumber,
       episodeNumber,
       originalLanguage,
@@ -318,6 +413,20 @@ export async function POST(req: NextRequest) {
     }
 
     let subtitleText: string | null = null;
+    let tmdbId: number | undefined;
+    let imdbId: string | undefined;
+    let alternativeNames: string[] = [];
+
+    if (showId) {
+      const tmdbInfo = await fetchTmdbShowInfo(showId);
+      if (tmdbInfo) {
+        tmdbId = tmdbInfo.tmdbId;
+        imdbId = tmdbInfo.imdbId;
+        alternativeNames = [tmdbInfo.originalName, tmdbInfo.name].filter(
+          (name): name is string => Boolean(name && name !== showName),
+        );
+      }
+    }
 
     /**
      * TRY OPENSUBTITLES FIRST
@@ -329,6 +438,9 @@ export async function POST(req: NextRequest) {
       seasonNumber,
       episodeNumber,
       originalLanguage,
+      tmdbId,
+      imdbId,
+      alternativeNames,
     });
 
     /**

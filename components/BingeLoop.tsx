@@ -238,6 +238,7 @@ export default function SearchSubtitles() {
     try {
       const requestBody: GenerateLessonRequest = {
         showName: selectedShow.name,
+        showId: selectedShow.id,
         seasonNumber: selectedSeason,
         episodeNumber: episode.episodeNumber,
         originalLanguage: selectedShow.originalLanguage,

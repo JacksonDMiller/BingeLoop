@@ -2,6 +2,7 @@ import type { LanguageId } from "@/languages";
 
 export type GenerateLessonRequest = {
   showName: string;
+  showId?: number;
   seasonNumber: number;
   episodeNumber: number;
   originalLanguage?: LanguageId;
