@@ -1,11 +1,12 @@
 "use client";
 
 import { Lesson } from "@/types/lesson";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { GenerateVoiceRequest } from "@/types/media";
 import { LanguageId } from "@/languages";
 import { PlayAudioButton } from "@/components/PlayAudioButton";
 import { translations } from "@/translations";
+import { useLocalStorageState } from "@/app/hooks/useLocalStorageState";
 
 type Props = {
   lesson: Lesson;
@@ -102,14 +103,36 @@ export default function LessonDisplay({
   studyLanguage,
   nativeLanguage,
 }: Props) {
-  const [showRomanized, setShowRomanized] = useState(true);
-  const [showNativeLanguage, setShowNativeLanguage] = useState(true);
+  const [showRomanized, setShowRomanized] = useLocalStorageState(
+    "showRomanized",
+    true,
+  );
+  const [showNativeLanguage, setShowNativeLanguage] = useLocalStorageState(
+    "showNativeLanguage",
+    true,
+  );
+  const [isVisible, setIsVisible] = useState(false);
 
   const t = translations[nativeLanguage];
   const lessonT = t.lesson;
 
+  useEffect(() => {
+    setIsVisible(false);
+    const frame = window.requestAnimationFrame(() => setIsVisible(true));
+    return () => window.cancelAnimationFrame(frame);
+  }, [lesson]);
+
   return (
-    <div className="mx-auto max-w-5xl space-y-10 px-4 py-10 text-white">
+    <div
+      className={`mx-auto max-w-5xl space-y-10 px-4 py-10 text-white transition duration-500 ease-out ${
+        isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+      }`}
+    >
+      <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 ring-1 ring-emerald-500/30 shadow-sm">
+        <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300 animate-pulse" />
+        {lessonT.lessonReady}
+      </div>
+
       {/* Header */}
       <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 border-b border-zinc-800 bg-black/80 py-4 backdrop-blur">
         <Toggle

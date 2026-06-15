@@ -11,6 +11,8 @@ export const translations = {
       loadingLesson: "Generating Lesson...",
       generating: "Generating...",
       generateLesson: "Generate Lesson",
+      lessonGenerationAdvice:
+        "This may take a moment — the lesson is being generated.",
       nextEpisode: "Next Episode",
       backToEpisodes: "Back to Episodes",
 
@@ -29,6 +31,7 @@ export const translations = {
     lesson: {
       romanized: "Romanized",
       nativeLanguage: "Native Language",
+      lessonReady: "Lesson ready!",
 
       preWatchSummary: {
         title: "Pre-Watch Summary",
@@ -73,6 +76,8 @@ export const translations = {
       loadingLesson: "レッスンを作成中...",
       generating: "作成中...",
       generateLesson: "レッスンを作成",
+      lessonGenerationAdvice:
+        "少し時間がかかります。レッスンを生成しています。",
       nextEpisode: "次のエピソード",
       backToEpisodes: "エピソード一覧へ戻る",
 
@@ -91,6 +96,7 @@ export const translations = {
     lesson: {
       romanized: "ローマ字",
       nativeLanguage: "母国語",
+      lessonReady: "レッスンの準備ができました！",
 
       preWatchSummary: {
         title: "視聴前のまとめ",
@@ -134,6 +140,7 @@ export const translations = {
       loadingLesson: "正在生成课程...",
       generating: "生成中...",
       generateLesson: "生成课程",
+      lessonGenerationAdvice: "这可能需要一点时间，正在生成课程。",
       nextEpisode: "下一集",
       backToEpisodes: "返回剧集列表",
 
@@ -152,6 +159,7 @@ export const translations = {
     lesson: {
       romanized: "拼音",
       nativeLanguage: "母语",
+      lessonReady: "课程已准备好！",
 
       preWatchSummary: {
         title: "观看前摘要",
@@ -195,6 +203,8 @@ export const translations = {
       loadingLesson: "레슨 생성 중...",
       generating: "생성 중...",
       generateLesson: "레슨 생성",
+      lessonGenerationAdvice:
+        "잠시 시간이 걸릴 수 있습니다. 레슨을 생성 중입니다.",
       nextEpisode: "다음 에피소드",
       backToEpisodes: "에피소드 목록으로",
 
@@ -213,6 +223,7 @@ export const translations = {
     lesson: {
       romanized: "로마자 표기",
       nativeLanguage: "모국어",
+      lessonReady: "레슨이 준비되었습니다!",
 
       preWatchSummary: {
         title: "시청 전 요약",
@@ -256,6 +267,8 @@ export const translations = {
       loadingLesson: "Generando lección...",
       generating: "Generando...",
       generateLesson: "Generar lección",
+      lessonGenerationAdvice:
+        "Esto puede tardar un momento. La lección se está generando.",
       nextEpisode: "Siguiente episodio",
       backToEpisodes: "Volver a episodios",
 
@@ -274,6 +287,7 @@ export const translations = {
     lesson: {
       romanized: "Romanización",
       nativeLanguage: "Idioma nativo",
+      lessonReady: "¡Lección lista!",
 
       preWatchSummary: {
         title: "Resumen previo",
@@ -317,6 +331,8 @@ export const translations = {
       loadingLesson: "Génération de la leçon...",
       generating: "Génération...",
       generateLesson: "Générer la leçon",
+      lessonGenerationAdvice:
+        "Cela peut prendre un moment. La leçon est en cours de génération.",
       nextEpisode: "Épisode suivant",
       backToEpisodes: "Retour aux épisodes",
 
@@ -335,6 +351,7 @@ export const translations = {
     lesson: {
       romanized: "Romanisation",
       nativeLanguage: "Langue maternelle",
+      lessonReady: "Leçon prête !",
 
       preWatchSummary: {
         title: "Résumé avant visionnage",
@@ -378,6 +395,8 @@ export const translations = {
       loadingLesson: "Lektion wird erstellt...",
       generating: "Erstellung...",
       generateLesson: "Lektion erstellen",
+      lessonGenerationAdvice:
+        "Das kann einen Moment dauern. Die Lektion wird gerade erstellt.",
       nextEpisode: "Nächste Folge",
       backToEpisodes: "Zurück zu den Folgen",
 
@@ -396,6 +415,7 @@ export const translations = {
     lesson: {
       romanized: "Romanisierung",
       nativeLanguage: "Muttersprache",
+      lessonReady: "Lektion bereit!",
 
       preWatchSummary: {
         title: "Zusammenfassung vor dem Ansehen",

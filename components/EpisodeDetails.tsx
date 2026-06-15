@@ -68,6 +68,13 @@ export default function EpisodeDetails({
         </div>
       )}
       {/* ACTIONS */}
+      {loadingLesson && (
+        <div className="rounded-3xl border border-gray-800 bg-white/5 p-4 text-sm text-zinc-300">
+          {t.lessonGenerationAdvice}
+          <p className="mt-2 font-semibold text-white">{t.loadingLesson}</p>
+        </div>
+      )}
+
       <div className="flex flex-wrap gap-3">
         <button
           onClick={onGenerateLesson}
