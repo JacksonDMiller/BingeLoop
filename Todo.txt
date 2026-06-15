@@ -1,6 +1,5 @@
-1. Accounts
+1. Accounts // maybe someday
 2. Ending assessment
-3. Avoid spoiler toggles 
-4. Fix voice button {saying object object}
-5. Trying to figure out Jimaku subs (see scratch paper)
-6. 
+3. Avoid spoiler toggles // maybe someday
+4. next episode button is not working very well.
+5. 

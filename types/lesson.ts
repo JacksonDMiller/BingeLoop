@@ -46,3 +46,18 @@ export type Lesson = {
 
   shadowingPractice: ShadowingLine[];
 };
+
+export type SavedLesson = {
+  id: string;
+  lesson: Lesson;
+  showName: string;
+  showId: number;
+  seasonNumber: number;
+  episodeNumber: number;
+  episodeName: string;
+  showImageUrl?: string | null;
+  episodeImageUrl?: string | null;
+  studyLanguage: string;
+  nativeLanguage: string;
+  savedAt: number;
+};

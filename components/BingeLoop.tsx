@@ -10,10 +10,12 @@ import type {
 import SearchBar from "@/components/SearchBar";
 import SearchResults from "@/components/SearchResults";
 import ShowDetails from "@/components/ShowDetails";
-import { Lesson } from "@/types/lesson";
+import PastLessons from "@/components/PastLessons";
+import { Lesson, SavedLesson } from "@/types/lesson";
 import { LANGUAGES, type LanguageId } from "@/languages";
 import { translations } from "@/translations";
 import { useLocalStorageState } from "@/app/hooks/useLocalStorageState";
+import { useLessonHistory } from "@/app/hooks/useLessonHistory";
 
 // TMDB API Response Types
 
@@ -104,6 +106,10 @@ export default function SearchSubtitles() {
   const [loadingLesson, setLoadingLesson] = useState(false);
 
   const [mounted, setMounted] = useState(false);
+
+  // LESSON HISTORY
+  const { history, addLesson, removeLesson, clearHistory } = useLessonHistory();
+  const [view, setView] = useState<"search" | "history">("search");
 
   useEffect(() => {
     setMounted(true);
@@ -275,7 +281,32 @@ export default function SearchSubtitles() {
 
       const data: GenerateLessonResponse = await response.json();
 
-      setLesson(data.lesson || null);
+      if (data.lesson) {
+        setLesson(data.lesson);
+
+        // Save to history
+        const savedLesson: SavedLesson = {
+          id: `${selectedShow.id}-s${selectedSeason}-e${episode.episodeNumber}-${Date.now()}`,
+          lesson: data.lesson,
+          showName: selectedShow.name,
+          showId: selectedShow.id,
+          seasonNumber: selectedSeason,
+          episodeNumber: episode.episodeNumber,
+          episodeName: episode.name,
+          showImageUrl: selectedShow.posterPath
+            ? `https://image.tmdb.org/t/p/w300${selectedShow.posterPath}`
+            : selectedShow.backdropPath
+            ? `https://image.tmdb.org/t/p/w780${selectedShow.backdropPath}`
+            : null,
+          episodeImageUrl: episode.stillPath
+            ? `https://image.tmdb.org/t/p/w300${episode.stillPath}`
+            : null,
+          studyLanguage,
+          nativeLanguage,
+          savedAt: Date.now(),
+        };
+        addLesson(savedLesson);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -299,6 +330,30 @@ export default function SearchSubtitles() {
     setLesson(null);
   }
 
+  // OPEN SAVED LESSON
+  function openSavedLesson(savedLesson: SavedLesson) {
+    setLesson(savedLesson.lesson);
+    setSelectedShow({
+      id: savedLesson.showId,
+      name: savedLesson.showName,
+      posterPath: null,
+      backdropPath: undefined,
+      overview: undefined,
+      firstAirDate: undefined,
+      originalLanguage: undefined,
+    });
+    setSelectedSeason(savedLesson.seasonNumber);
+    setSelectedEpisode({
+      id: 0,
+      episodeNumber: savedLesson.episodeNumber,
+      name: savedLesson.episodeName,
+      airDate: undefined,
+      overview: undefined,
+      stillPath: null,
+    });
+    setView("search");
+  }
+
   if (!mounted) {
     return null;
   }
@@ -314,94 +369,137 @@ export default function SearchSubtitles() {
         <p className="mt-2 text-lg text-gray-400 sm:text-xl">{t.tagline}</p>
       </div>
 
-      {/* TOP BAR */}
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end">
-        <SearchBar
-          inputValue={inputValue}
-          setInputValue={setInputValue}
-          setSearchQuery={setSearchQuery}
-          selectedShowName={selectedShow?.name}
-          clearSelection={() => {
-            setSelectedShow(null);
-            setSelectedSeason(null);
-            setSelectedEpisode(null);
-
-            setSeasons([]);
-            setEpisodes([]);
-
-            setLesson(null);
-          }}
-          nativeLanguage={nativeLanguage}
-        />
-
-        <div className="w-full sm:w-52">
-          <label
-            htmlFor="study-language"
-            className="mb-2 block text-sm font-medium text-gray-400"
-          >
-            {t.studyLanguageLabel}
-          </label>
-
-          <select
-            id="study-language"
-            value={studyLanguage}
-            onChange={(e) => setStudyLanguage(e.target.value as LanguageId)}
-            className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
-          >
-            {LANGUAGE_OPTIONS.map(([id, language]) => (
-              <option key={id} value={id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="w-full sm:w-52">
-          <label
-            htmlFor="native-language"
-            className="mb-2 block text-sm font-medium text-gray-400"
-          >
-            {t.nativeLanguageLabel}
-          </label>
-
-          <select
-            id="native-language"
-            value={nativeLanguage}
-            onChange={(e) => setNativeLanguage(e.target.value as LanguageId)}
-            className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
-          >
-            {LANGUAGE_OPTIONS.map(([id, language]) => (
-              <option key={id} value={id}>
-                {language.name}
-              </option>
-            ))}
-          </select>
-        </div>
+      {/* TABS */}
+      <div className="mb-8 flex gap-4 border-b border-gray-800">
+        <button
+          onClick={() => setView("search")}
+          className={`pb-3 px-4 font-medium transition ${
+            view === "search"
+              ? "border-b-2 border-orange-500 text-white"
+              : "text-gray-400 hover:text-white"
+          }`}
+        >
+          {t.searchTab}
+        </button>
+        <button
+          onClick={() => setView("history")}
+          className={`pb-3 px-4 font-medium transition relative ${
+            view === "history"
+              ? "border-b-2 border-orange-500 text-white"
+              : "text-gray-400 hover:text-white"
+          }`}
+        >
+          {t.historyTab}
+          {history.length > 0 && (
+            <span className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
+              {Math.min(history.length, 9)}
+            </span>
+          )}
+        </button>
       </div>
 
-      <SearchResults results={results} onSelectShow={selectShow} />
-
-      {selectedShow && (
-        <ShowDetails
-          selectedShow={selectedShow}
-          seasons={seasons}
-          selectedSeason={selectedSeason}
-          episodes={episodes}
-          selectedEpisode={selectedEpisode}
-          lesson={lesson}
-          loadingLesson={loadingLesson}
-          studyLanguage={studyLanguage}
+      {view === "history" && (
+        <PastLessons
+          lessons={history}
+          onSelectLesson={openSavedLesson}
+          onDeleteLesson={removeLesson}
+          onClearHistory={clearHistory}
           nativeLanguage={nativeLanguage}
-          onSelectSeason={selectSeason}
-          onSelectEpisode={setSelectedEpisode}
-          onBackToEpisodes={() => {
-            setSelectedEpisode(null);
-            setLesson(null);
-          }}
-          onGenerateLesson={generateLesson}
-          onNextEpisode={goToNextEpisode}
-          clearLesson={() => setLesson(null)}
         />
+      )}
+
+      {view === "search" && (
+        <>
+          {/* TOP BAR */}
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end">
+            <SearchBar
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              setSearchQuery={setSearchQuery}
+              selectedShowName={selectedShow?.name}
+              clearSelection={() => {
+                setSelectedShow(null);
+                setSelectedSeason(null);
+                setSelectedEpisode(null);
+
+                setSeasons([]);
+                setEpisodes([]);
+
+                setLesson(null);
+              }}
+              nativeLanguage={nativeLanguage}
+            />
+
+            <div className="w-full sm:w-52">
+              <label
+                htmlFor="study-language"
+                className="mb-2 block text-sm font-medium text-gray-400"
+              >
+                {t.studyLanguageLabel}
+              </label>
+
+              <select
+                id="study-language"
+                value={studyLanguage}
+                onChange={(e) => setStudyLanguage(e.target.value as LanguageId)}
+                className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
+              >
+                {LANGUAGE_OPTIONS.map(([id, language]) => (
+                  <option key={id} value={id}>
+                    {language.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="w-full sm:w-52">
+              <label
+                htmlFor="native-language"
+                className="mb-2 block text-sm font-medium text-gray-400"
+              >
+                {t.nativeLanguageLabel}
+              </label>
+
+              <select
+                id="native-language"
+                value={nativeLanguage}
+                onChange={(e) => setNativeLanguage(e.target.value as LanguageId)}
+                className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
+              >
+                {LANGUAGE_OPTIONS.map(([id, language]) => (
+                  <option key={id} value={id}>
+                    {language.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <SearchResults results={results} onSelectShow={selectShow} />
+
+          {selectedShow && (
+            <ShowDetails
+              selectedShow={selectedShow}
+              seasons={seasons}
+              selectedSeason={selectedSeason}
+              episodes={episodes}
+              selectedEpisode={selectedEpisode}
+              lesson={lesson}
+              loadingLesson={loadingLesson}
+              studyLanguage={studyLanguage}
+              nativeLanguage={nativeLanguage}
+              onSelectSeason={selectSeason}
+              onSelectEpisode={setSelectedEpisode}
+              onBackToEpisodes={() => {
+                setSelectedEpisode(null);
+                setLesson(null);
+              }}
+              onGenerateLesson={generateLesson}
+              onNextEpisode={goToNextEpisode}
+              clearLesson={() => setLesson(null)}
+            />
+          )}
+        </>
       )}
     </div>
   );
