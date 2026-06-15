@@ -43,6 +43,17 @@ type TmdbEpisode = {
   still_path?: string | null;
 };
 
+function normalizeEpisodes(episodes: TmdbEpisode[]): Episode[] {
+  return episodes.map((episode) => ({
+    id: episode.id,
+    episodeNumber: episode.episode_number,
+    name: episode.name,
+    airDate: episode.air_date,
+    overview: episode.overview,
+    stillPath: episode.still_path,
+  }));
+}
+
 type SearchShowsResponse = {
   results: TmdbShow[];
 };
@@ -104,6 +115,7 @@ export default function SearchSubtitles() {
   // LESSON
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loadingLesson, setLoadingLesson] = useState(false);
+  const [isSavedLesson, setIsSavedLesson] = useState(false);
 
   const [mounted, setMounted] = useState(false);
 
@@ -172,6 +184,7 @@ export default function SearchSubtitles() {
     setSelectedShow(show);
     setSelectedSeason(null);
     setSelectedEpisode(null);
+    setIsSavedLesson(false);
 
     setSeasons([]);
     setEpisodes([]);
@@ -211,6 +224,7 @@ export default function SearchSubtitles() {
 
     setSelectedSeason(seasonNumber);
     setSelectedEpisode(null);
+    setIsSavedLesson(false);
 
     setLesson(null);
 
@@ -229,17 +243,7 @@ export default function SearchSubtitles() {
       }
 
       const data: SeasonDetailsResponse = await response.json();
-
-      const normalizedEpisodes: Episode[] = data.episodes.map((episode) => ({
-        id: episode.id,
-        episodeNumber: episode.episode_number,
-        name: episode.name,
-        airDate: episode.air_date,
-        overview: episode.overview,
-        stillPath: episode.still_path,
-      }));
-
-      setEpisodes(normalizedEpisodes);
+      setEpisodes(normalizeEpisodes(data.episodes));
     } catch (err) {
       console.error(err);
     }
@@ -283,6 +287,7 @@ export default function SearchSubtitles() {
 
       if (data.lesson) {
         setLesson(data.lesson);
+        setIsSavedLesson(false);
 
         // Save to history
         const savedLesson: SavedLesson = {
@@ -296,8 +301,8 @@ export default function SearchSubtitles() {
           showImageUrl: selectedShow.posterPath
             ? `https://image.tmdb.org/t/p/w300${selectedShow.posterPath}`
             : selectedShow.backdropPath
-            ? `https://image.tmdb.org/t/p/w780${selectedShow.backdropPath}`
-            : null,
+              ? `https://image.tmdb.org/t/p/w780${selectedShow.backdropPath}`
+              : null,
           episodeImageUrl: episode.stillPath
             ? `https://image.tmdb.org/t/p/w300${episode.stillPath}`
             : null,
@@ -331,8 +336,9 @@ export default function SearchSubtitles() {
   }
 
   // OPEN SAVED LESSON
-  function openSavedLesson(savedLesson: SavedLesson) {
+  async function openSavedLesson(savedLesson: SavedLesson) {
     setLesson(savedLesson.lesson);
+    setIsSavedLesson(true);
     setSelectedShow({
       id: savedLesson.showId,
       name: savedLesson.showName,
@@ -351,7 +357,55 @@ export default function SearchSubtitles() {
       overview: undefined,
       stillPath: null,
     });
+    setSeasons([]);
+    setEpisodes([]);
     setView("search");
+
+    try {
+      const languageCode = LANGUAGES[nativeLanguage].codes.tmdb;
+
+      const showResponse = await fetch(
+        `/api/showDetails?id=${savedLesson.showId}&language=${encodeURIComponent(
+          languageCode,
+        )}`,
+      );
+
+      if (showResponse.ok) {
+        const data: ShowDetailsResponse = await showResponse.json();
+
+        const filteredSeasons: Season[] = data.seasons
+          .filter((season) => season.season_number > 0)
+          .map((season) => ({
+            seasonNumber: season.season_number,
+            name: season.name,
+          }));
+
+        setSeasons(filteredSeasons);
+      }
+
+      const seasonResponse = await fetch(
+        `/api/seasonDetails?showId=${savedLesson.showId}&season=${savedLesson.seasonNumber}&language=${encodeURIComponent(
+          languageCode,
+        )}`,
+      );
+
+      if (seasonResponse.ok) {
+        const seasonData: SeasonDetailsResponse = await seasonResponse.json();
+        const normalizedEpisodes = normalizeEpisodes(seasonData.episodes);
+
+        setEpisodes(normalizedEpisodes);
+
+        const restoredEpisode = normalizedEpisodes.find(
+          (episode) => episode.episodeNumber === savedLesson.episodeNumber,
+        );
+
+        if (restoredEpisode) {
+          setSelectedEpisode(restoredEpisode);
+        }
+      }
+    } catch (err) {
+      console.error("Failed to open saved lesson:", err);
+    }
   }
 
   if (!mounted) {
@@ -463,7 +517,9 @@ export default function SearchSubtitles() {
               <select
                 id="native-language"
                 value={nativeLanguage}
-                onChange={(e) => setNativeLanguage(e.target.value as LanguageId)}
+                onChange={(e) =>
+                  setNativeLanguage(e.target.value as LanguageId)
+                }
                 className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
               >
                 {LANGUAGE_OPTIONS.map(([id, language]) => (
@@ -493,10 +549,15 @@ export default function SearchSubtitles() {
               onBackToEpisodes={() => {
                 setSelectedEpisode(null);
                 setLesson(null);
+                setIsSavedLesson(false);
               }}
               onGenerateLesson={generateLesson}
               onNextEpisode={goToNextEpisode}
-              clearLesson={() => setLesson(null)}
+              clearLesson={() => {
+                setLesson(null);
+                setIsSavedLesson(false);
+              }}
+              isSavedLesson={isSavedLesson}
             />
           )}
         </>

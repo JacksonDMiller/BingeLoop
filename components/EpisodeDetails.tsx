@@ -15,6 +15,7 @@ type EpisodeDetailsProps = {
   onNextEpisode: () => void;
   studyLanguage: LanguageId;
   nativeLanguage: LanguageId;
+  isSavedLesson: boolean;
 };
 
 export default function EpisodeDetails({
@@ -26,6 +27,7 @@ export default function EpisodeDetails({
   onNextEpisode,
   studyLanguage,
   nativeLanguage,
+  isSavedLesson,
 }: EpisodeDetailsProps) {
   console.log(lesson);
   // Use nativeLanguage for UI translations (the language the user understands)
@@ -105,6 +107,7 @@ export default function EpisodeDetails({
           lesson={lesson}
           studyLanguage={studyLanguage}
           nativeLanguage={nativeLanguage}
+          isSavedLesson={isSavedLesson}
         ></LessonDisplay>
       )}
     </div>

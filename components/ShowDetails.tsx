@@ -17,6 +17,7 @@ type ShowDetailsProps = {
 
   lesson: Lesson | null;
   loadingLesson: boolean;
+  isSavedLesson: boolean;
 
   onSelectSeason: (seasonNumber: number) => void;
 
@@ -45,6 +46,7 @@ export default function ShowDetails({
 
   lesson,
   loadingLesson,
+  isSavedLesson,
   studyLanguage,
   nativeLanguage,
 
@@ -100,6 +102,7 @@ export default function ShowDetails({
               onNextEpisode={onNextEpisode}
               studyLanguage={studyLanguage}
               nativeLanguage={nativeLanguage}
+              isSavedLesson={isSavedLesson}
             />
           )}
         </div>

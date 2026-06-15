@@ -41,7 +41,9 @@ export default function PastLessons({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">{t.recentLessonsTitle}</h2>
+        <h2 className="text-2xl font-bold text-white">
+          {t.recentLessonsTitle}
+        </h2>
         {lessons.length > 0 && (
           <button
             onClick={onClearHistory}
@@ -83,7 +85,8 @@ export default function PastLessons({
                 </h3>
 
                 <p className="text-sm text-gray-400">
-                  {t.season} {lesson.seasonNumber}, {t.episode} {lesson.episodeNumber}
+                  {t.season} {lesson.seasonNumber}, {t.episode}{" "}
+                  {lesson.episodeNumber}
                 </p>
 
                 <p className="text-sm text-gray-300">{lesson.episodeName}</p>

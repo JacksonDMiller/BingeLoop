@@ -12,6 +12,7 @@ type Props = {
   lesson: Lesson;
   studyLanguage: LanguageId;
   nativeLanguage: LanguageId;
+  isSavedLesson?: boolean;
 };
 
 function Toggle({
@@ -84,16 +85,16 @@ function LanguageLine({
   showNativeLanguage: boolean;
 }) {
   return (
-    <div className="space-y-1">
-      <p className="text-xl leading-relaxed text-white">{target}</p>
+    <div className="space-y-2">
+      <p className="text-xl leading-relaxed text-white">{nativeLanguage}</p>
 
       {showRomanized && romanized && (
-        <p className="text-sm italic text-zinc-400">{romanized}</p>
+        <p className="text-sm italic leading-relaxed text-zinc-400">
+          {romanized}
+        </p>
       )}
 
-      {showNativeLanguage && nativeLanguage && (
-        <p className="text-sm text-zinc-300">{nativeLanguage}</p>
-      )}
+      <p className="pt-1 text-sm leading-relaxed text-zinc-300">{target}</p>
     </div>
   );
 }
@@ -102,6 +103,7 @@ export default function LessonDisplay({
   lesson,
   studyLanguage,
   nativeLanguage,
+  isSavedLesson = false,
 }: Props) {
   const [showRomanized, setShowRomanized] = useLocalStorageState(
     "showRomanized",
@@ -128,10 +130,12 @@ export default function LessonDisplay({
         isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
       }`}
     >
-      <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 ring-1 ring-emerald-500/30 shadow-sm">
-        <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300 animate-pulse" />
-        {lessonT.lessonReady}
-      </div>
+      {!isSavedLesson && (
+        <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 ring-1 ring-emerald-500/30 shadow-sm">
+          <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300 animate-pulse" />
+          {lessonT.lessonReady}
+        </div>
+      )}
 
       {/* Header */}
       <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 border-b border-zinc-800 bg-black/80 py-4 backdrop-blur">
@@ -161,9 +165,9 @@ export default function LessonDisplay({
 
         <div className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-xl">
           <LanguageLine
+            nativeLanguage={lesson.preWatchSummary.nativeLanguage}
             target={lesson.preWatchSummary.studyLanguage}
             romanized={lesson.preWatchSummary.romanized}
-            nativeLanguage={lesson.preWatchSummary.nativeLanguage}
             showRomanized={showRomanized}
             showNativeLanguage={showNativeLanguage}
           />
