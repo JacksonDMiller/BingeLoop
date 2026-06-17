@@ -24,7 +24,7 @@ export default function EpisodesList({
           <button
             key={episode.id}
             onClick={() => onSelectEpisode(episode)}
-            className="flex w-full items-center gap-4 rounded-lg border border-gray-700 p-3 text-left text-white transition hover:border-gray-500 hover:bg-white/5"
+            className="flex w-full items-center gap-4 rounded-lg bg-slate-950/80 p-3 text-left text-white transition hover:bg-slate-900/90"
           >
             {episode.stillPath && (
               <img

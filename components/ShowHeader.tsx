@@ -6,24 +6,28 @@ type ShowHeaderProps = {
 
 export default function ShowHeader({ show }: ShowHeaderProps) {
   return (
-    <div className="flex flex-col gap-5 sm:flex-row">
+    <div className="flex flex-col gap-6 rounded-[28px] bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)] sm:flex-row">
       {show.posterPath && (
         <img
           src={`https://image.tmdb.org/t/p/w300${show.posterPath}`}
           alt={show.name}
-          className="w-32 shrink-0 rounded-xl"
+          className="h-40 w-32 flex-none rounded-3xl object-cover"
         />
       )}
 
       <div className="flex-1">
-        <h2 className="mb-2 text-3xl font-bold text-white">{show.name}</h2>
+        <h2 className="text-4xl font-bold text-white">{show.name}</h2>
 
         {show.firstAirDate && (
-          <div className="mb-3 text-sm text-gray-500">{show.firstAirDate}</div>
+          <div className="mt-2 text-sm uppercase tracking-[0.24em] text-slate-500">
+            {show.firstAirDate}
+          </div>
         )}
 
         {show.overview && (
-          <p className="leading-relaxed text-gray-300">{show.overview}</p>
+          <p className="mt-4 max-w-3xl leading-7 text-slate-300">
+            {show.overview}
+          </p>
         )}
       </div>
     </div>

@@ -120,7 +120,7 @@ export default function SearchSubtitles() {
   const [mounted, setMounted] = useState(false);
 
   // LESSON HISTORY
-  const { history, addLesson, removeLesson, clearHistory } = useLessonHistory();
+  const { history, addLesson, removeLesson } = useLessonHistory();
   const [view, setView] = useState<"search" | "history">("search");
 
   useEffect(() => {
@@ -413,155 +413,168 @@ export default function SearchSubtitles() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-5xl p-4">
-      {/* HEADER */}
-      <div className="mb-10 text-center">
-        <h1 className="bg-gradient-to-r from-white to-gray-400 bg-clip-text pb-2 text-5xl font-black leading-none tracking-tight text-transparent sm:text-6xl">
-          BingeLoop
-        </h1>
+    <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
+      <div className="rounded-[32px] border border-[rgba(148,163,184,0.14)] bg-[rgba(15,23,42,0.88)] p-8 shadow-[0_40px_120px_rgba(15,23,42,0.35)] backdrop-blur-xl">
+        <div className="mb-10 text-center">
+          <p className="text-sm uppercase tracking-[0.24em] text-slate-500">
+            Language learning, recomposed
+          </p>
+          <h1 className="mt-4 text-5xl font-semibold tracking-tight text-white sm:text-6xl">
+            BingeLoop
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+            Generate focused lessons from TV and anime episodes, then practice
+            vocabulary and dialogue with audio support.
+          </p>
+        </div>
 
-        <p className="mt-2 text-lg text-gray-400 sm:text-xl">{t.tagline}</p>
-      </div>
-
-      {/* TABS */}
-      <div className="mb-8 flex gap-4 border-b border-gray-800">
-        <button
-          onClick={() => setView("search")}
-          className={`pb-3 px-4 font-medium transition ${
-            view === "search"
-              ? "border-b-2 border-orange-500 text-white"
-              : "text-gray-400 hover:text-white"
-          }`}
-        >
-          {t.searchTab}
-        </button>
-        <button
-          onClick={() => setView("history")}
-          className={`pb-3 px-4 font-medium transition relative ${
-            view === "history"
-              ? "border-b-2 border-orange-500 text-white"
-              : "text-gray-400 hover:text-white"
-          }`}
-        >
-          {t.historyTab}
-          {history.length > 0 && (
-            <span className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs font-bold text-white">
-              {Math.min(history.length, 9)}
-            </span>
-          )}
-        </button>
-      </div>
-
-      {view === "history" && (
-        <PastLessons
-          lessons={history}
-          onSelectLesson={openSavedLesson}
-          onDeleteLesson={removeLesson}
-          onClearHistory={clearHistory}
-          nativeLanguage={nativeLanguage}
-        />
-      )}
-
-      {view === "search" && (
-        <>
-          {/* TOP BAR */}
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end">
-            <SearchBar
-              inputValue={inputValue}
-              setInputValue={setInputValue}
-              setSearchQuery={setSearchQuery}
-              selectedShowName={selectedShow?.name}
-              clearSelection={() => {
-                setSelectedShow(null);
-                setSelectedSeason(null);
-                setSelectedEpisode(null);
-
-                setSeasons([]);
-                setEpisodes([]);
-
-                setLesson(null);
-              }}
-              nativeLanguage={nativeLanguage}
-            />
-
-            <div className="w-full sm:w-52">
-              <label
-                htmlFor="study-language"
-                className="mb-2 block text-sm font-medium text-gray-400"
-              >
-                {t.studyLanguageLabel}
-              </label>
-
-              <select
-                id="study-language"
-                value={studyLanguage}
-                onChange={(e) => setStudyLanguage(e.target.value as LanguageId)}
-                className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
-              >
-                {LANGUAGE_OPTIONS.map(([id, language]) => (
-                  <option key={id} value={id}>
-                    {language.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="w-full sm:w-52">
-              <label
-                htmlFor="native-language"
-                className="mb-2 block text-sm font-medium text-gray-400"
-              >
-                {t.nativeLanguageLabel}
-              </label>
-
-              <select
-                id="native-language"
-                value={nativeLanguage}
-                onChange={(e) =>
-                  setNativeLanguage(e.target.value as LanguageId)
-                }
-                className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white focus:border-gray-500 focus:outline-none"
-              >
-                {LANGUAGE_OPTIONS.map(([id, language]) => (
-                  <option key={id} value={id}>
-                    {language.name}
-                  </option>
-                ))}
-              </select>
+        <div className="rounded-2xl border border-[rgba(148,163,184,0.18)] mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3">
+            <div className="rounded-3xl bg-slate-950/60 p-2">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setView("search")}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    view === "search"
+                      ? "bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20"
+                      : "text-slate-300 hover:bg-white/5"
+                  }`}
+                >
+                  {t.searchTab}
+                </button>
+                <button
+                  onClick={() => setView("history")}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    view === "history"
+                      ? "bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20"
+                      : "text-slate-300 hover:bg-white/5"
+                  }`}
+                >
+                  {t.historyTab}
+                </button>
+              </div>
             </div>
           </div>
 
-          <SearchResults results={results} onSelectShow={selectShow} />
-
-          {selectedShow && (
-            <ShowDetails
-              selectedShow={selectedShow}
-              seasons={seasons}
-              selectedSeason={selectedSeason}
-              episodes={episodes}
-              selectedEpisode={selectedEpisode}
-              lesson={lesson}
-              loadingLesson={loadingLesson}
-              studyLanguage={studyLanguage}
+          {view === "history" && (
+            <PastLessons
+              lessons={history}
+              onSelectLesson={openSavedLesson}
+              onDeleteLesson={removeLesson}
               nativeLanguage={nativeLanguage}
-              onSelectSeason={selectSeason}
-              onSelectEpisode={setSelectedEpisode}
-              onBackToEpisodes={() => {
-                setSelectedEpisode(null);
-                setLesson(null);
-                setIsSavedLesson(false);
-              }}
-              onGenerateLesson={generateLesson}
-              onNextEpisode={goToNextEpisode}
-              clearLesson={() => {
-                setLesson(null);
-                setIsSavedLesson(false);
-              }}
-              isSavedLesson={isSavedLesson}
             />
           )}
-        </>
-      )}
+
+          {view === "search" && (
+            <>
+              <div className="flex flex-wrap items-end justify-between gap-4 p-4">
+                <div className="min-w-[260px] flex-1">
+                  <SearchBar
+                    inputValue={inputValue}
+                    setInputValue={setInputValue}
+                    setSearchQuery={setSearchQuery}
+                    selectedShowName={selectedShow?.name}
+                    clearSelection={() => {
+                      setSelectedShow(null);
+                      setSelectedSeason(null);
+                      setSelectedEpisode(null);
+                      setSeasons([]);
+                      setEpisodes([]);
+                      setLesson(null);
+                    }}
+                    nativeLanguage={nativeLanguage}
+                  />
+                </div>
+
+                <div className="grid w-full max-w-[460px] gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="study-language"
+                      className="mb-2 block text-sm font-medium text-slate-400"
+                    >
+                      {t.studyLanguageLabel}
+                    </label>
+                    <select
+                      id="study-language"
+                      value={studyLanguage}
+                      onChange={(e) =>
+                        setStudyLanguage(e.target.value as LanguageId)
+                      }
+                      className="h-12 w-full rounded-2xl border border-transparent bg-slate-950/70 px-4 text-white backdrop-blur-sm transition hover:border-slate-500 focus:border-orange-400 focus:outline-none"
+                    >
+                      {LANGUAGE_OPTIONS.map(([id, language]) => (
+                        <option key={id} value={id}>
+                          {language.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="native-language"
+                      className="mb-2 block text-sm font-medium text-slate-400"
+                    >
+                      {t.nativeLanguageLabel}
+                    </label>
+                    <select
+                      id="native-language"
+                      value={nativeLanguage}
+                      onChange={(e) =>
+                        setNativeLanguage(e.target.value as LanguageId)
+                      }
+                      className="h-12 w-full rounded-2xl border border-transparent bg-slate-950/70 px-4 text-white backdrop-blur-sm transition hover:border-slate-500 focus:border-orange-400 focus:outline-none"
+                    >
+                      {LANGUAGE_OPTIONS.map(([id, language]) => (
+                        <option key={id} value={id}>
+                          {language.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <SearchResults results={results} onSelectShow={selectShow} />
+
+              {selectedShow && (
+                <ShowDetails
+                  selectedShow={selectedShow}
+                  seasons={seasons}
+                  selectedSeason={selectedSeason}
+                  episodes={episodes}
+                  selectedEpisode={selectedEpisode}
+                  lesson={lesson}
+                  loadingLesson={loadingLesson}
+                  studyLanguage={studyLanguage}
+                  nativeLanguage={nativeLanguage}
+                  onSelectSeason={selectSeason}
+                  onSelectEpisode={setSelectedEpisode}
+                  onBackToEpisodes={() => {
+                    setSelectedEpisode(null);
+                    setLesson(null);
+                    setIsSavedLesson(false);
+                  }}
+                  onGenerateLesson={generateLesson}
+                  onNextEpisode={goToNextEpisode}
+                  clearLesson={() => {
+                    setLesson(null);
+                    setIsSavedLesson(false);
+                  }}
+                  isSavedLesson={isSavedLesson}
+                />
+              )}
+            </>
+          )}
+        </div>
+      </div>
+
+      <footer className="mt-10 rounded-[28px] bg-slate-950/75 px-6 py-5 text-center text-sm text-slate-400 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+        <p>
+          Designed for immersive learning. Powered by TV, anime, and your own
+          study routine.
+        </p>
+      </footer>
     </div>
   );
 }

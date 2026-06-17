@@ -54,15 +54,10 @@ export function useLessonHistory() {
     setHistory((prev) => prev.filter((item) => item.id !== id));
   };
 
-  const clearHistory = () => {
-    setHistory([]);
-  };
-
   return {
     history,
     addLesson,
     removeLesson,
-    clearHistory,
     mounted,
   };
 }

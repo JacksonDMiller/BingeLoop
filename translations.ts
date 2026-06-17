@@ -11,10 +11,8 @@ export const translations = {
       historyTab: "Recent Lessons",
       noSavedLessons: "No saved lessons yet.",
       recentLessonsTitle: "Recent Lessons",
-      clearHistory: "Clear All",
       deleteLesson: "Delete",
 
-      loadingLesson: "Generating Lesson...",
       generating: "Generating...",
       generateLesson: "Generate Lesson",
       lessonGenerationAdvice:
@@ -82,10 +80,8 @@ export const translations = {
       historyTab: "レッスン履歴",
       noSavedLessons: "保存されたレッスンはありません。",
       recentLessonsTitle: "最近のレッスン",
-      clearHistory: "すべてクリア",
       deleteLesson: "削除",
 
-      loadingLesson: "レッスンを作成中...",
       generating: "作成中...",
       generateLesson: "レッスンを作成",
       lessonGenerationAdvice:
@@ -152,13 +148,12 @@ export const translations = {
       historyTab: "历史课程",
       noSavedLessons: "尚无保存的课程。",
       recentLessonsTitle: "最近课程",
-      clearHistory: "清除全部",
       deleteLesson: "删除",
 
-      loadingLesson: "正在生成课程...",
       generating: "生成中...",
       generateLesson: "生成课程",
-      lessonGenerationAdvice: "这可能需要一点时间，正在生成课程。",
+      lessonGenerationAdvice:
+        "这可能需要一点时间，正在生成课程。",
       nextEpisode: "下一集",
       backToEpisodes: "返回剧集列表",
 
@@ -221,12 +216,10 @@ export const translations = {
       historyTab: "최근 레슨",
       noSavedLessons: "저장된 레슨이 없습니다.",
       recentLessonsTitle: "최근 레슨",
-      clearHistory: "모두 지우기",
       deleteLesson: "삭제",
 
-      loadingLesson: "레슨 생성 중...",
       generating: "생성 중...",
-      generateLesson: "레슨 생성",
+      generateLesson: "レ슨 생성",
       lessonGenerationAdvice:
         "잠시 시간이 걸릴 수 있습니다. 레슨을 생성 중입니다.",
       nextEpisode: "다음 에피소드",
@@ -291,10 +284,8 @@ export const translations = {
       historyTab: "Lecciones recientes",
       noSavedLessons: "No hay lecciones guardadas aún.",
       recentLessonsTitle: "Lecciones recientes",
-      clearHistory: "Borrar todo",
       deleteLesson: "Eliminar",
 
-      loadingLesson: "Generando lección...",
       generating: "Generando...",
       generateLesson: "Generar lección",
       lessonGenerationAdvice:
@@ -361,10 +352,8 @@ export const translations = {
       historyTab: "Leçons récentes",
       noSavedLessons: "Aucune leçon enregistrée pour le moment.",
       recentLessonsTitle: "Leçons récentes",
-      clearHistory: "Tout effacer",
       deleteLesson: "Supprimer",
 
-      loadingLesson: "Génération de la leçon...",
       generating: "Génération...",
       generateLesson: "Générer la leçon",
       lessonGenerationAdvice:
@@ -431,10 +420,8 @@ export const translations = {
       historyTab: "Letzte Lektionen",
       noSavedLessons: "Noch keine gespeicherten Lektionen.",
       recentLessonsTitle: "Letzte Lektionen",
-      clearHistory: "Alle löschen",
       deleteLesson: "Löschen",
 
-      loadingLesson: "Lektion wird erstellt...",
       generating: "Erstellung...",
       generateLesson: "Lektion erstellen",
       lessonGenerationAdvice:

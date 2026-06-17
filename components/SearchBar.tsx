@@ -28,7 +28,7 @@ export default function SearchBar({
     <div className="flex-1">
       <label
         htmlFor="show-search"
-        className="mb-2 block text-sm font-medium text-gray-400"
+        className="mb-2 block text-sm font-medium text-slate-400"
       >
         {t.watchLabel}
       </label>
@@ -49,7 +49,7 @@ export default function SearchBar({
             clearSelection();
           }
         }}
-        className="h-12 w-full rounded-xl border border-gray-700 bg-black/40 px-4 text-white placeholder:text-gray-500 focus:border-gray-500 focus:outline-none"
+        className="h-12 w-full rounded-2xl border border-transparent bg-slate-950/80 px-5 text-white placeholder:text-slate-500 shadow-[0_20px_50px_rgba(15,23,42,0.18)] transition hover:border-slate-500 focus:ring-2 focus:ring-orange-500/30 focus:border-orange-400 focus:outline-none focus:backdrop-blur-sm"
       />
     </div>
   );

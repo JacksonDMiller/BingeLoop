@@ -27,10 +27,10 @@ function Toggle({
   return (
     <button
       onClick={onChange}
-      className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
         checked
-          ? "bg-orange-500 text-white"
-          : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+          ? "bg-orange-500 text-slate-950 shadow-lg shadow-orange-500/20"
+          : "bg-slate-900 text-slate-300 hover:bg-slate-800"
       }`}
     >
       {label}
@@ -126,19 +126,18 @@ export default function LessonDisplay({
 
   return (
     <div
-      className={`mx-auto max-w-5xl space-y-10 px-4 py-10 text-white transition duration-500 ease-out ${
+      className={`mx-auto max-w-5xl space-y-10 px-4 py-10 text-white transition duration-500 ease-out sm:px-6 ${
         isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
       }`}
     >
       {!isSavedLesson && (
-        <div className="flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-200 ring-1 ring-emerald-500/30 shadow-sm">
-          <span className="inline-flex h-2.5 w-2.5 rounded-full bg-emerald-300 animate-pulse" />
+        <div className="flex items-center gap-2 rounded-full bg-orange-500/10 px-4 py-2 text-sm font-semibold text-orange-200 ring-1 ring-orange-500/25 shadow-sm">
+          <span className="inline-flex h-2.5 w-2.5 rounded-full bg-orange-300 animate-pulse" />
           {lessonT.lessonReady}
         </div>
       )}
 
-      {/* Header */}
-      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 border-b border-zinc-800 bg-black/80 py-4 backdrop-blur">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center gap-3 rounded-3xl bg-slate-950/90 p-4 shadow-[0_20px_50px_rgba(15,23,42,0.25)] backdrop-blur">
         <Toggle
           label={lessonT.romanized}
           checked={showRomanized}
@@ -163,7 +162,7 @@ export default function LessonDisplay({
           </p>
         </div>
 
-        <div className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-xl">
+        <div className="rounded-[28px] bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)]">
           <LanguageLine
             nativeLanguage={lesson.preWatchSummary.nativeLanguage}
             target={lesson.preWatchSummary.studyLanguage}
@@ -187,7 +186,7 @@ export default function LessonDisplay({
           {lesson.keyVocabulary.map((item, index) => (
             <div
               key={index}
-              className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-xl"
+              className="rounded-3xl bg-zinc-900/60 p-6 shadow-xl"
             >
               <div className="flex flex-wrap items-center gap-3">
                 <h3 className="text-3xl font-bold text-orange-400">
@@ -225,7 +224,7 @@ export default function LessonDisplay({
                 <p className="mt-2 text-zinc-300">{item.memoryHint}</p>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <div className="mt-5 rounded-2xl bg-black/40 p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
                     {lessonT.keyVocabulary.exampleSentence}
@@ -263,7 +262,7 @@ export default function LessonDisplay({
           {lesson.grammarFocus.map((item, index) => (
             <div
               key={index}
-              className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-6 shadow-xl"
+              className="rounded-3xl bg-zinc-900/60 p-6 shadow-xl"
             >
               <h3 className="text-2xl font-bold">{item.name}</h3>
 
@@ -301,7 +300,7 @@ export default function LessonDisplay({
                 </div>
               </div>
 
-              <div className="mt-5 rounded-2xl border border-zinc-800 bg-black/40 p-4">
+              <div className="mt-5 rounded-2xl bg-black/40 p-4">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
                     {lessonT.grammarFocus.example}
@@ -329,10 +328,10 @@ export default function LessonDisplay({
       {/* Shadowing */}
       <section className="space-y-5">
         <div>
-          <h2 className="text-3xl font-bold">
+          <h2 className="text-3xl font-semibold text-white">
             {lessonT.shadowingPractice.title}
           </h2>
-          <p className="mt-1 text-zinc-400">
+          <p className="mt-1 text-slate-400">
             {lessonT.shadowingPractice.description}
           </p>
         </div>
@@ -341,16 +340,16 @@ export default function LessonDisplay({
           {lesson.shadowingPractice.map((line, index) => (
             <div
               key={index}
-              className="rounded-3xl border border-zinc-800 bg-zinc-900/60 p-5 shadow-xl"
+              className="rounded-3xl bg-zinc-900/60 p-6 shadow-xl"
             >
-              <div className="mb-4 flex items-center justify-between">
+              <div className="mb-4 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 font-bold text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-500 text-sm font-semibold text-slate-950">
                     {index + 1}
                   </div>
 
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
+                    <p className="text-xs font-semibold uppercase tracking-[0.26em] text-slate-500">
                       {lessonT.shadowingPractice.shadowingLine}
                     </p>
                   </div>
@@ -359,17 +358,21 @@ export default function LessonDisplay({
                 <PlayAudioButton
                   text={line.targetLanguage}
                   language={studyLanguage}
-                ></PlayAudioButton>
+                />
               </div>
 
-              <div className="space-y-3">
-                <LanguageLine
-                  target={line.targetLanguage}
-                  romanized={line.romanized}
-                  nativeLanguage={line.nativeLanguage}
-                  showRomanized={showRomanized}
-                  showNativeLanguage={showNativeLanguage}
-                />
+              <div className="mt-4 rounded-2xl bg-black/40 p-4">
+                <div className="space-y-1">
+                  <p className="text-2xl font-semibold leading-relaxed text-white">{line.targetLanguage}</p>
+
+                  {showNativeLanguage && line.nativeLanguage && (
+                    <p className="text-lg leading-relaxed text-zinc-300">{line.nativeLanguage}</p>
+                  )}
+
+                  {showRomanized && line.romanized && (
+                    <p className="text-sm italic leading-relaxed text-zinc-400">{line.romanized}</p>
+                  )}
+                </div>
               </div>
             </div>
           ))}

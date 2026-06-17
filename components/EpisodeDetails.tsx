@@ -34,59 +34,59 @@ export default function EpisodeDetails({
   const t = translations[nativeLanguage].searchPage;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <button
         onClick={onBack}
-        className="rounded-lg border border-gray-700 px-4 py-2 text-white transition hover:border-gray-500 hover:bg-white/5"
+        className="inline-flex items-center gap-2 rounded-full bg-slate-950/80 px-5 py-3 text-sm font-semibold text-slate-100 transition hover:bg-slate-900"
       >
         ← {t.backToEpisodes}
       </button>
-      {/* EPISODE IMAGE */}
+
       {episode.stillPath && (
         <img
           src={`https://image.tmdb.org/t/p/w780${episode.stillPath}`}
           alt={episode.name}
-          className="w-full rounded-xl"
+          className="w-full rounded-[28px] object-cover"
         />
       )}
-      {/* EPISODE INFO */}
-      <div>
-        <h3 className="mb-1 text-2xl font-bold text-white">
-          {t.episode} {episode.episodeNumber}
-        </h3>
 
-        <div className="mb-2 text-lg text-gray-200">{episode.name}</div>
+      <div className="rounded-[28px] bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+        <div>
+          <h3 className="text-3xl font-semibold text-white">
+            {t.episode} {episode.episodeNumber}
+          </h3>
+          <p className="mt-2 text-xl text-slate-200">{episode.name}</p>
+          {episode.airDate && (
+            <p className="mt-1 text-sm uppercase tracking-[0.24em] text-slate-500">
+              {episode.airDate}
+            </p>
+          )}
+        </div>
 
-        {episode.airDate && (
-          <div className="text-sm text-gray-500">{episode.airDate}</div>
+        {episode.overview && (
+          <div className="mt-6 space-y-3">
+            <h4 className="text-lg font-semibold text-white">{t.synopsis}</h4>
+            <p className="leading-7 text-slate-300">{episode.overview}</p>
+          </div>
         )}
       </div>
-      {/* SYNOPSIS */}
-      {episode.overview && (
-        <div>
-          <h4 className="mb-2 font-bold text-white">{t.synopsis}</h4>
 
-          <p className="leading-relaxed text-gray-300">{episode.overview}</p>
-        </div>
-      )}
-      {/* ACTIONS */}
       {loadingLesson && (
-        <div className="rounded-3xl border border-gray-800 bg-white/5 p-4 text-sm text-zinc-300">
-          {t.lessonGenerationAdvice}
-          <p className="mt-2 font-semibold text-white">{t.loadingLesson}</p>
+        <div className="rounded-[28px] bg-slate-950/80 p-5 text-sm text-slate-300 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+          <p>{t.lessonGenerationAdvice}</p>
         </div>
       )}
 
       <div className="flex flex-wrap gap-3">
+
         <button
           onClick={onGenerateLesson}
           disabled={loadingLesson}
-          className="flex min-w-[180px] items-center justify-center rounded-xl border border-gray-700 px-4 py-3 text-white transition hover:border-gray-500 hover:bg-white/5 disabled:cursor-not-allowed disabled:opacity-70"
+          className="inline-flex min-w-[180px] items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-orange-500/20 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {loadingLesson ? (
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-
               <span>{t.generating}</span>
             </div>
           ) : (
@@ -96,19 +96,19 @@ export default function EpisodeDetails({
 
         <button
           onClick={onNextEpisode}
-          className="rounded-xl border border-gray-700 px-4 py-3 text-white transition hover:border-gray-500 hover:bg-white/5"
+          className="inline-flex min-w-[180px] items-center justify-center rounded-2xl bg-slate-950/80 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-900"
         >
           {t.nextEpisode} →
         </button>
       </div>
-      {/* LESSON */}
+
       {lesson && (
         <LessonDisplay
           lesson={lesson}
           studyLanguage={studyLanguage}
           nativeLanguage={nativeLanguage}
           isSavedLesson={isSavedLesson}
-        ></LessonDisplay>
+        />
       )}
     </div>
   );
