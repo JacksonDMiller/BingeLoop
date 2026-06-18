@@ -363,14 +363,20 @@ export default function LessonDisplay({
 
               <div className="mt-4 rounded-2xl bg-black/40 p-4">
                 <div className="space-y-1">
-                  <p className="text-2xl font-semibold leading-relaxed text-white">{line.targetLanguage}</p>
+                  <p className="text-2xl font-semibold leading-relaxed text-white">
+                    {line.targetLanguage}
+                  </p>
 
                   {showNativeLanguage && line.nativeLanguage && (
-                    <p className="text-lg leading-relaxed text-zinc-300">{line.nativeLanguage}</p>
+                    <p className="text-lg leading-relaxed text-zinc-300">
+                      {line.nativeLanguage}
+                    </p>
                   )}
 
                   {showRomanized && line.romanized && (
-                    <p className="text-sm italic leading-relaxed text-zinc-400">{line.romanized}</p>
+                    <p className="text-sm italic leading-relaxed text-zinc-400">
+                      {line.romanized}
+                    </p>
                   )}
                 </div>
               </div>

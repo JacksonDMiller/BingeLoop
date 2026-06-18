@@ -39,7 +39,9 @@ export default function PastLessons({
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="mt-2 pl-4 text-3xl font-semibold text-white">{t.recentLessonsTitle}</h2>
+        <h2 className="mt-2 pl-4 text-3xl font-semibold text-white">
+          {t.recentLessonsTitle}
+        </h2>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -53,59 +55,64 @@ export default function PastLessons({
                 className="group overflow-hidden rounded-[28px] border border-[rgba(148,163,184,0.18)] bg-slate-950/85 shadow-[0_20px_60px_rgba(15,23,42,0.2)] transition hover:-translate-y-1 hover:bg-slate-900/95"
                 onClick={() => onSelectLesson(lesson)}
               >
-              {lesson.episodeImageUrl ? (
-                <img
-                  src={lesson.episodeImageUrl}
-                  alt={lesson.episodeName}
-                  className="h-44 w-full object-cover"
-                />
-              ) : lesson.showImageUrl ? (
-                <img
-                  src={lesson.showImageUrl}
-                  alt={lesson.showName}
-                  className="h-44 w-full object-cover"
-                />
-              ) : (
-                <div className="h-44 w-full bg-slate-900" />
-              )}
+                {lesson.episodeImageUrl ? (
+                  <img
+                    src={lesson.episodeImageUrl}
+                    alt={lesson.episodeName}
+                    className="h-44 w-full object-cover"
+                  />
+                ) : lesson.showImageUrl ? (
+                  <img
+                    src={lesson.showImageUrl}
+                    alt={lesson.showName}
+                    className="h-44 w-full object-cover"
+                  />
+                ) : (
+                  <div className="h-44 w-full bg-slate-900" />
+                )}
 
-              <div className="space-y-3 p-5">
-                <h3 className="text-xl font-semibold text-white transition group-hover:text-orange-300">
-                  {lesson.showName}
-                </h3>
+                <div className="space-y-3 p-5">
+                  <h3 className="text-xl font-semibold text-white transition group-hover:text-orange-300">
+                    {lesson.showName}
+                  </h3>
 
-                <p className="text-sm text-slate-400">
-                  {t.season} {lesson.seasonNumber}, {t.episode} {lesson.episodeNumber}
-                </p>
+                  <p className="text-sm text-slate-400">
+                    {t.season} {lesson.seasonNumber}, {t.episode}{" "}
+                    {lesson.episodeNumber}
+                  </p>
 
-                <p className="text-sm leading-6 text-slate-300">{lesson.episodeName}</p>
+                  <p className="text-sm leading-6 text-slate-300">
+                    {lesson.episodeName}
+                  </p>
 
-                <div className="flex flex-wrap gap-2 pt-2">
-                  <span className="inline-flex rounded-full bg-slate-900/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-300">
-                    {nativeLang.name}
-                  </span>
-                  <span className="inline-flex items-center gap-2 text-xs text-slate-500">
-                    →
-                    <span className="rounded-full bg-orange-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-orange-200">
-                      {studyLang.name}
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    <span className="inline-flex rounded-full bg-slate-900/70 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-slate-300">
+                      {nativeLang.name}
                     </span>
-                  </span>
+                    <span className="inline-flex items-center gap-2 text-xs text-slate-500">
+                      →
+                      <span className="rounded-full bg-orange-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.24em] text-orange-200">
+                        {studyLang.name}
+                      </span>
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-slate-500">
+                    {formatDate(lesson.savedAt)}
+                  </p>
                 </div>
 
-                <p className="text-xs text-slate-500">{formatDate(lesson.savedAt)}</p>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteLesson(lesson.id);
+                  }}
+                  className="w-full bg-slate-950/90 px-5 py-3 text-left text-sm font-semibold text-red-300 transition group-hover:bg-slate-900/95"
+                >
+                  {t.deleteLesson}
+                </button>
               </div>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onDeleteLesson(lesson.id);
-                }}
-                className="w-full bg-slate-950/90 px-5 py-3 text-left text-sm font-semibold text-red-300 transition group-hover:bg-slate-900/95"
-              >
-                {t.deleteLesson}
-              </button>
             </div>
-          </div>
           );
         })}
       </div>

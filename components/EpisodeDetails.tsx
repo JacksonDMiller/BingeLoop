@@ -78,7 +78,6 @@ export default function EpisodeDetails({
       )}
 
       <div className="flex flex-wrap gap-3">
-
         <button
           onClick={onGenerateLesson}
           disabled={loadingLesson}

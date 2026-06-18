@@ -152,8 +152,7 @@ export const translations = {
 
       generating: "生成中...",
       generateLesson: "生成课程",
-      lessonGenerationAdvice:
-        "这可能需要一点时间，正在生成课程。",
+      lessonGenerationAdvice: "这可能需要一点时间，正在生成课程。",
       nextEpisode: "下一集",
       backToEpisodes: "返回剧集列表",
 
