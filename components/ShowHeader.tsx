@@ -6,7 +6,7 @@ type ShowHeaderProps = {
 
 export default function ShowHeader({ show }: ShowHeaderProps) {
   return (
-    <div className="flex flex-col gap-6 rounded-[28px] bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)] sm:flex-row">
+    <div className="flex flex-col gap-6 rounded-[28px] bg-slate-950/80 px-4 py-4 shadow-[0_20px_60px_rgba(15,23,42,0.18)] sm:flex-row sm:px-6">
       {show.posterPath && (
         <img
           src={`https://image.tmdb.org/t/p/w300${show.posterPath}`}

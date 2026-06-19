@@ -126,7 +126,7 @@ export default function LessonDisplay({
 
   return (
     <div
-      className={`mx-auto max-w-5xl space-y-10 px-4 py-10 text-white transition duration-500 ease-out sm:px-6 ${
+      className={`mx-auto max-w-5xl space-y-10 px-0 py-10 text-white transition duration-500 ease-out sm:px-6 ${
         isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
       }`}
     >
@@ -153,7 +153,7 @@ export default function LessonDisplay({
 
       {/* Summary */}
       <section className="space-y-4">
-        <div>
+        <div className="px-4 sm:px-0">
           <h2 className="text-3xl font-bold">
             {lessonT.preWatchSummary.title}
           </h2>
@@ -162,7 +162,7 @@ export default function LessonDisplay({
           </p>
         </div>
 
-        <div className="rounded-[28px] bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)]">
+        <div className="rounded-[28px] bg-slate-950/80 px-4 py-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)] sm:px-6">
           <LanguageLine
             nativeLanguage={lesson.preWatchSummary.nativeLanguage}
             target={lesson.preWatchSummary.studyLanguage}
@@ -175,7 +175,7 @@ export default function LessonDisplay({
 
       {/* Vocabulary */}
       <section className="space-y-5">
-        <div>
+        <div className="px-4 sm:px-0">
           <h2 className="text-3xl font-bold">{lessonT.keyVocabulary.title}</h2>
           <p className="mt-1 text-zinc-400">
             {lessonT.keyVocabulary.description}
@@ -186,7 +186,7 @@ export default function LessonDisplay({
           {lesson.keyVocabulary.map((item, index) => (
             <div
               key={index}
-              className="rounded-3xl bg-zinc-900/60 p-6 shadow-xl"
+              className="rounded-3xl bg-zinc-900/60 px-4 py-6 shadow-xl sm:px-6 sm:py-6"
             >
               <div className="flex flex-wrap items-center gap-3">
                 <h3 className="text-3xl font-bold text-orange-400">
@@ -216,7 +216,7 @@ export default function LessonDisplay({
 
               <p className="mt-4 text-zinc-200">{item.shortExplanation}</p>
 
-              <div className="mt-4 rounded-2xl bg-zinc-950/70 p-4">
+              <div className="mt-4 rounded-2xl bg-zinc-950/70 px-4 py-4 sm:px-4">
                 <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
                   {lessonT.keyVocabulary.memoryHint}
                 </p>
@@ -224,7 +224,7 @@ export default function LessonDisplay({
                 <p className="mt-2 text-zinc-300">{item.memoryHint}</p>
               </div>
 
-              <div className="mt-5 rounded-2xl bg-black/40 p-4">
+              <div className="mt-5 rounded-2xl bg-black/40 px-4 py-4 sm:px-4">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
                     {lessonT.keyVocabulary.exampleSentence}
@@ -251,7 +251,7 @@ export default function LessonDisplay({
 
       {/* Grammar */}
       <section className="space-y-5">
-        <div>
+        <div className="px-4 sm:px-0">
           <h2 className="text-3xl font-bold">{lessonT.grammarFocus.title}</h2>
           <p className="mt-1 text-zinc-400">
             {lessonT.grammarFocus.description}
@@ -262,11 +262,11 @@ export default function LessonDisplay({
           {lesson.grammarFocus.map((item, index) => (
             <div
               key={index}
-              className="rounded-3xl bg-zinc-900/60 p-6 shadow-xl"
+              className="rounded-3xl bg-zinc-900/60 px-4 py-6 shadow-xl sm:px-6 sm:py-6"
             >
               <h3 className="text-2xl font-bold">{item.name}</h3>
 
-              <div className="mt-4 rounded-2xl bg-orange-500/10 p-4">
+              <div className="mt-4 rounded-2xl bg-orange-500/10 px-4 py-4 sm:px-4">
                 <p className="text-sm uppercase tracking-wide text-orange-300">
                   {lessonT.grammarFocus.pattern}
                 </p>
@@ -300,7 +300,7 @@ export default function LessonDisplay({
                 </div>
               </div>
 
-              <div className="mt-5 rounded-2xl bg-black/40 p-4">
+              <div className="mt-5 rounded-2xl bg-black/40 px-4 py-4 sm:px-4">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-sm font-semibold uppercase tracking-wide text-zinc-500">
                     {lessonT.grammarFocus.example}
@@ -327,7 +327,7 @@ export default function LessonDisplay({
 
       {/* Shadowing */}
       <section className="space-y-5">
-        <div>
+        <div className="px-4 sm:px-0">
           <h2 className="text-3xl font-semibold text-white">
             {lessonT.shadowingPractice.title}
           </h2>
@@ -340,7 +340,7 @@ export default function LessonDisplay({
           {lesson.shadowingPractice.map((line, index) => (
             <div
               key={index}
-              className="rounded-3xl bg-zinc-900/60 p-6 shadow-xl"
+              className="rounded-3xl bg-zinc-900/60 px-4 py-6 shadow-xl sm:px-6 sm:py-6"
             >
               <div className="mb-4 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -361,7 +361,7 @@ export default function LessonDisplay({
                 />
               </div>
 
-              <div className="mt-4 rounded-2xl bg-black/40 p-4">
+              <div className="mt-4 rounded-2xl bg-black/40 px-4 py-4 sm:px-4">
                 <div className="space-y-1">
                   <p className="text-2xl font-semibold leading-relaxed text-white">
                     {line.targetLanguage}

@@ -21,7 +21,7 @@ export default function PastLessons({
 
   if (lessons.length === 0) {
     return (
-      <div className="rounded-[28px] bg-slate-950/80 p-12 text-center shadow-[0_20px_60px_rgba(15,23,42,0.2)]">
+      <div className="rounded-[28px] bg-slate-950/80 px-4 py-12 text-center shadow-[0_20px_60px_rgba(15,23,42,0.2)] sm:px-12">
         <p className="text-slate-400">{t.noSavedLessons}</p>
       </div>
     );
@@ -39,7 +39,7 @@ export default function PastLessons({
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="mt-2 pl-4 text-3xl font-semibold text-white">
+        <h2 className="mt-2 px-4 text-3xl font-semibold text-white sm:pl-4">
           {t.recentLessonsTitle}
         </h2>
       </div>
@@ -50,7 +50,7 @@ export default function PastLessons({
           const nativeLang = LANGUAGES[lesson.nativeLanguage as LanguageId];
 
           return (
-            <div key={lesson.id} className="p-2">
+            <div key={lesson.id} className="px-4 sm:p-2">
               <div
                 className="group overflow-hidden rounded-[28px] border border-[rgba(148,163,184,0.18)] bg-slate-950/85 shadow-[0_20px_60px_rgba(15,23,42,0.2)] transition hover:-translate-y-1 hover:bg-slate-900/95"
                 onClick={() => onSelectLesson(lesson)}
@@ -71,7 +71,7 @@ export default function PastLessons({
                   <div className="h-44 w-full bg-slate-900" />
                 )}
 
-                <div className="space-y-3 p-5">
+                <div className="space-y-3 px-3 py-5 sm:px-5">
                   <h3 className="text-xl font-semibold text-white transition group-hover:text-orange-300">
                     {lesson.showName}
                   </h3>
@@ -107,7 +107,7 @@ export default function PastLessons({
                     e.stopPropagation();
                     onDeleteLesson(lesson.id);
                   }}
-                  className="w-full bg-slate-950/90 px-5 py-3 text-left text-sm font-semibold text-red-300 transition group-hover:bg-slate-900/95"
+                  className="w-full bg-slate-950/90 px-3 py-3 text-left text-sm font-semibold text-red-300 transition group-hover:bg-slate-900/95 sm:px-5"
                 >
                   {t.deleteLesson}
                 </button>

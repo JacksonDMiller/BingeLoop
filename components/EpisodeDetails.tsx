@@ -50,7 +50,7 @@ export default function EpisodeDetails({
         />
       )}
 
-      <div className="rounded-[28px] bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+      <div className="rounded-[28px] bg-slate-950/80 px-4 py-6 shadow-[0_20px_60px_rgba(15,23,42,0.18)] sm:px-6">
         <div>
           <h3 className="text-3xl font-semibold text-white">
             {t.episode} {episode.episodeNumber}
@@ -72,7 +72,7 @@ export default function EpisodeDetails({
       </div>
 
       {loadingLesson && (
-        <div className="rounded-[28px] bg-slate-950/80 p-5 text-sm text-slate-300 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+        <div className="rounded-[28px] bg-slate-950/80 px-4 py-5 text-sm text-slate-300 shadow-[0_20px_60px_rgba(15,23,42,0.18)] sm:px-5">
           <p>{t.lessonGenerationAdvice}</p>
         </div>
       )}

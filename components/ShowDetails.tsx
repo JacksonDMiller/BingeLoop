@@ -70,10 +70,10 @@ export default function ShowDetails({
           </div>
         )}
 
-        <div className="space-y-6 p-8">
+        <div className="space-y-6 px-0 py-5 sm:p-8">
           <ShowHeader show={selectedShow} />
 
-          <div className="rounded-3xl bg-slate-950/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)]">
+          <div className="rounded-3xl bg-slate-950/70 px-4 py-4 shadow-[0_20px_60px_rgba(15,23,42,0.2)] sm:px-6">
             <SeasonsList
               seasons={seasons}
               selectedSeason={selectedSeason}
@@ -85,7 +85,7 @@ export default function ShowDetails({
           {selectedSeason !== null &&
             episodes.length > 0 &&
             !selectedEpisode && (
-              <div className="rounded-3xl bg-slate-950/70 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)]">
+              <div className="rounded-3xl bg-slate-950/70 px-4 py-4 shadow-[0_20px_60px_rgba(15,23,42,0.2)] sm:px-6">
                 <EpisodesList
                   episodes={episodes}
                   onSelectEpisode={onSelectEpisode}
@@ -95,7 +95,7 @@ export default function ShowDetails({
             )}
 
           {selectedEpisode && (
-            <div className="rounded-[28px] bg-slate-950/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.2)]">
+            <div className="rounded-[28px] bg-slate-950/80 px-4 py-4 shadow-[0_20px_60px_rgba(15,23,42,0.2)] sm:px-6">
               <EpisodeDetails
                 episode={selectedEpisode}
                 lesson={lesson}

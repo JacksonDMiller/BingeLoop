@@ -413,8 +413,8 @@ export default function SearchSubtitles() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pb-16 pt-6 sm:px-6 lg:px-8">
-      <div className="rounded-[32px] border border-[rgba(148,163,184,0.14)] bg-[rgba(15,23,42,0.88)] p-8 shadow-[0_40px_120px_rgba(15,23,42,0.35)] backdrop-blur-xl">
+    <div className="mx-auto w-full max-w-6xl px-0 pb-16 pt-0 sm:px-6 sm:pt-6 lg:px-8">
+      <div className="px-0 sm:px-8">
         <div className="mb-10 text-center">
           <p className="text-sm uppercase tracking-[0.24em] text-slate-500">
             Language learning, recomposed
@@ -429,8 +429,8 @@ export default function SearchSubtitles() {
         </div>
 
         <div className="rounded-2xl border border-[rgba(148,163,184,0.18)] mb-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3">
-            <div className="rounded-3xl bg-slate-950/60 p-2">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 sm:p-3">
+            <div className="rounded-3xl bg-slate-950/60 p-2 sm:p-2">
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setView("search")}
@@ -467,7 +467,7 @@ export default function SearchSubtitles() {
 
           {view === "search" && (
             <>
-              <div className="flex flex-wrap items-end justify-between gap-4 p-4">
+              <div className="flex flex-wrap items-end justify-between gap-4 px-4 py-3 sm:p-4">
                 <div className="min-w-[260px] flex-1">
                   <SearchBar
                     inputValue={inputValue}
@@ -569,7 +569,7 @@ export default function SearchSubtitles() {
         </div>
       </div>
 
-      <footer className="mt-10 rounded-[28px] bg-slate-950/75 px-6 py-5 text-center text-sm text-slate-400 shadow-[0_20px_60px_rgba(15,23,42,0.18)]">
+      <footer className="mt-10 rounded-[28px] bg-slate-950/75 px-4 py-5 text-center text-sm text-slate-400 shadow-[0_20px_60px_rgba(15,23,42,0.18)] sm:px-6">
         <p>
           Designed for immersive learning. Powered by TV, anime, and your own
           study routine.

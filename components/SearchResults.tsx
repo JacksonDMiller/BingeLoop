@@ -14,12 +14,12 @@ export default function SearchResults({
   }
 
   return (
-    <div className="mb-4 grid gap-4 px-4">
+    <div className="mb-4 grid gap-4 px-4 sm:px-4">
       {results.map((show) => (
         <button
           key={show.id}
           onClick={() => onSelectShow(show)}
-          className="group grid w-full grid-cols-[96px_1fr] gap-4 overflow-hidden rounded-[28px] border border-transparent bg-slate-950/80 p-4 text-left transition hover:-translate-y-0.5 hover:border-slate-500"
+          className="group grid w-full grid-cols-[96px_1fr] gap-4 overflow-hidden rounded-[28px] border border-transparent bg-slate-950/80 px-4 py-4 text-left transition hover:-translate-y-0.5 hover:border-slate-500 sm:px-4"
         >
           {show.posterPath ? (
             <img
