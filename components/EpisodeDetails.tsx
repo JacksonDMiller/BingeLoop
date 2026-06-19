@@ -78,20 +78,22 @@ export default function EpisodeDetails({
       )}
 
       <div className="flex flex-wrap gap-3">
-        <button
-          onClick={onGenerateLesson}
-          disabled={loadingLesson}
-          className="inline-flex min-w-[180px] items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-orange-500/20 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          {loadingLesson ? (
-            <div className="flex items-center gap-2">
-              <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-              <span>{t.generating}</span>
-            </div>
-          ) : (
-            t.generateLesson
-          )}
-        </button>
+        {!lesson && (
+          <button
+            onClick={onGenerateLesson}
+            disabled={loadingLesson}
+            className="inline-flex min-w-[180px] items-center justify-center rounded-2xl bg-orange-500 px-5 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-orange-500/20 transition hover:bg-orange-400 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {loadingLesson ? (
+              <div className="flex items-center gap-2">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                <span>{t.generating}</span>
+              </div>
+            ) : (
+              t.generateLesson
+            )}
+          </button>
+        )}
 
         <button
           onClick={onNextEpisode}
