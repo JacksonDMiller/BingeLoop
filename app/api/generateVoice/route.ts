@@ -3,7 +3,9 @@ import textToSpeech from "@google-cloud/text-to-speech";
 import { LANGUAGES, type LanguageId } from "@/languages";
 import { GenerateVoiceRequest } from "@/types/media";
 
-const client = new textToSpeech.TextToSpeechClient();
+const client = new textToSpeech.TextToSpeechClient({
+  credentials: JSON.parse(process.env.GOOGLE_CREDENTIALS!),
+});
 
 const VOICES = {
   english: {
